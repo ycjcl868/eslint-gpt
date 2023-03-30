@@ -1,0 +1,31 @@
+{
+  "Index": {
+    "title": "ESLint Rule Generator",
+    "switchLocale": "中文",
+    "deployWiki": "Deploy your own website?",
+    "description2": "Help you generate a custom eslint rule",
+    "slogan": "Too stressed Out to Write Github README? Let me help you!",
+    "step0": "Paste your OpenAI API Key",
+    "openaiApiKeyPlaceholder": "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "step1": "Give a brief description of your eslint rule",
+    "helpPageLink": "(Click here for the tutorial)",
+    "placeholder": "\"帐号\" and \"账户\" are not allowed to be used, \"账号\" and \"账户\" are recommended instead.",
+    "step2": "Provide a code example",
+    "goodLabel": "correct:",
+    "badLabel": "incorrect:",
+    "simplifierButton": "Generate ESLint rule code",
+    "privacyPolicy1": "Do not upload too private content, details check",
+    "privacyPolicy2": "《Privacy Statement》",
+    "paragraphForm": "paragraph",
+    "prompt": "Please help me write an ESLint rule. Only provide the rule code, the rule's requirements: {description}.",
+    "code_tip": "The rule validates correct code as pass and incorrect code as fail. Here are the examples of correct and incorrect code:",
+    "good": "\n\n// correct\n```js\n{code}\n```",
+    "bad": "\n\n// incorrect\n```js\n{code}\n```",
+    "outlineForm": "Outline",
+    "pasteButton": "Paste",
+    "clearButton": "Clear",
+    "notice": "Now the service will be unstable due to the surge in visits, so you can first collect this website and use it in your spare time. Everyone is too enthusiastic, and the projects released at random have received far more attention than expected.",
+    "copyToast": "README copied to clipboard",
+    "timeout": "Request timeout, please try again"
+  }
+}

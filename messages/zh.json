@@ -1,0 +1,30 @@
+{
+  "Index": {
+    "title": "ESLint 规则生成器",
+    "switchLocale": "EN",
+    "deployWiki": "部署自己的网站？",
+    "description2": "帮你生成 ESLint 规则",
+    "step0": "粘贴你的 OpenAI API Key",
+    "openaiApiKeyPlaceholder": "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "step1": "简单描述一下需要的 ESLint 规则",
+    "helpPageLink": "(点击这里查看教程)",
+    "placeholder": "不允许使用\"帐号\"、\"账户\"，建议改成\"账号\"、\"账户\"",
+    "step2": "给出代码示例",
+    "goodLabel": "正确：",
+    "badLabel": "错误：",
+    "simplifierButton": "生成 ESLint 规则代码",
+    "privacyPolicy1": "请勿上传过于隐私的内容，详情查看",
+    "privacyPolicy2": "《隐私声明》",
+    "paragraphForm": "段落",
+    "prompt": "请帮我写一个 eslint 规则，只需要给出规则代码，规则要求：{description}。",
+    "code_tip": "规则校验正确代码通过，错误代码不通过，以下是正确和错误代码示例：",
+    "good": "\n\n// 正确\n```js\n{code}\n```",
+    "bad": "\n\n// 错误\n```js\n{code}\n```",
+    "outlineForm": "大纲",
+    "pasteButton": "粘贴",
+    "clearButton": "清空",
+    "notice": "现在访问量激增服务会不稳定，可以先收藏此网站，闲时再用，大家太热情了，随手发布的项目收获到了远超预想的关注。",
+    "copyToast": "README 复制到剪贴板",
+    "timeout": "请求超时，请重试"
+  }
+}
