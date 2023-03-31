@@ -13,7 +13,7 @@
     "step2": "Provide a code example",
     "goodLabel": "correct:",
     "badLabel": "incorrect:",
-    "simplifierButton": "Generate ESLint rule code",
+    "simplifierButton": "Generate",
     "privacyPolicy1": "Do not upload too private content, details check",
     "privacyPolicy2": "《Privacy Statement》",
     "paragraphForm": "paragraph",

@@ -12,7 +12,7 @@
     "step2": "给出代码示例",
     "goodLabel": "正确：",
     "badLabel": "错误：",
-    "simplifierButton": "生成 ESLint 规则代码",
+    "simplifierButton": "生成",
     "privacyPolicy1": "请勿上传过于隐私的内容，详情查看",
     "privacyPolicy2": "《隐私声明》",
     "paragraphForm": "段落",
