@@ -225,19 +225,6 @@ const Home: NextPage = () => {
             <div className='flex space-x-3'>
               <div className='flex-1 mt-2'>
                 <label className='flex items-center'>
-                  <HandThumbUpIcon className='w-4 h-4 text-green-400' />
-                  &nbsp;
-                  {t('goodLabel')}
-                </label>
-                <textarea
-                  value={good}
-                  onChange={(e) => setGood(e.target.value)}
-                  rows={10}
-                  className='bg-[#f6fff6] w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 my-2'
-                />
-              </div>
-              <div className='flex-1 mt-2'>
-                <label className='flex items-center'>
                   <HandThumbDownIcon className='w-4 h-4 text-red-400' />
                   &nbsp;
                   {t('badLabel')}
@@ -247,6 +234,19 @@ const Home: NextPage = () => {
                   onChange={(e) => setBad(e.target.value)}
                   rows={10}
                   className='bg-[#fff6f6] w-full rounded-md border-gray-300 shadow-sm focus:border-red-400 focus:ring-red-400 my-2'
+                />
+              </div>
+              <div className='flex-1 mt-2'>
+                <label className='flex items-center'>
+                  <HandThumbUpIcon className='w-4 h-4 text-green-400' />
+                  &nbsp;
+                  {t('goodLabel')}
+                </label>
+                <textarea
+                  value={good}
+                  onChange={(e) => setGood(e.target.value)}
+                  rows={10}
+                  className='bg-[#f6fff6] w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 my-2'
                 />
               </div>
             </div>
