@@ -10,7 +10,7 @@ export interface ExploreProps {
 const Explore: React.FunctionComponent<ExploreProps> = (props) => {
   const { rules } = props
   return (
-    <div>
+    <div className='flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen'>
       <Header />
       <main
         className={`flex flex-1 w-full flex-col items-center justify-center px-4 mt-6`}
