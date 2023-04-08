@@ -1,24 +1,26 @@
-import { AnimatePresence, motion } from 'framer-motion'
-
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { Toaster, toast } from 'react-hot-toast'
 import { TwitterShareButton } from 'react-share'
 import Balancer from 'react-wrap-balancer'
-import { marked } from 'marked'
-import prism from 'prismjs'
 import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline'
 import Footer from '../components/Footer'
 import Github from '../components/GitHub'
 import TwitterIcon from '../components/TwitterIcon'
 import Header from '../components/Header'
 import LoadingDots from '../components/LoadingDots'
-import ResizablePanel from '../components/ResizablePanel'
+import Banner from '../components/Banner'
 import { fetchWithTimeout } from '../utils/fetchWithTimeout'
 import { generateSignature } from '../utils/auth'
+import useView from '@/hooks/useView'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+
+const Result = dynamic(() => import('../components/Result'), { ssr: false })
 
 const useUserKey = process.env.NEXT_PUBLIC_USE_USER_KEY === 'true'
 const useNotice = process.env.NEXT_NOTICE === 'true'
@@ -29,23 +31,40 @@ const GOOD_PLACEHOLDER =
 const BAD_PLACEHOLDER =
   "const id = '1234';\nconst rawText = '帐户';\nconst rawText1 = `帐户: ${id}`;\nconst rawText2 = '帐号';\nconst rawText3 = `帐号: ${id}`;"
 
-const Home: NextPage = () => {
+const Home: NextPage<{ detail: any }> = (props) => {
   const t = useTranslations('Index')
   const locale = useLocale()
+  const router = useRouter()
+  const { id } = router.query
+
+  const detail = id && props.detail ? props.detail : null
 
   const [loading, setLoading] = useState(false)
-  const [chat, setChat] = useState(t('placeholder'))
-  const [good, setGood] = useState(GOOD_PLACEHOLDER)
-  const [bad, setBad] = useState(BAD_PLACEHOLDER)
+  const [chat, setChat] = useState(detail?.description || t('placeholder'))
+  const [good, setGood] = useState(detail?.correct || GOOD_PLACEHOLDER)
+  const [bad, setBad] = useState(detail?.incorrect || BAD_PLACEHOLDER)
   const [api_key, setAPIKey] = useState('')
-  const [generatedChat, setGeneratedChat] = useState<String>('')
+  const [generatedChat, setGeneratedChat] = useState<String>(
+    detail?.result || ''
+  )
 
   console.log('Streamed response: ', generatedChat)
   console.log('locale', locale)
+  console.log('detail', detail)
+
+  useView(detail?.id)
+  useEffect(() => {
+    setChat(detail?.description || t('placeholder'))
+  }, [t('placeholder')])
 
   useEffect(() => {
-    setChat(t('placeholder'))
-  }, [t('placeholder')])
+    if (!id) {
+      setChat(t('placeholder'))
+      setGood(GOOD_PLACEHOLDER)
+      setBad(BAD_PLACEHOLDER)
+      setGeneratedChat('')
+    }
+  }, [id])
 
   const generateChat = async (e: any) => {
     e.preventDefault()
@@ -136,6 +155,38 @@ const Home: NextPage = () => {
 
   const disabled = !chat
 
+  const handleSharing = async () => {
+    const response = await fetchWithTimeout('/api/rules', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: REQUEST_TIMEOUT,
+      body: JSON.stringify({
+        description: chat,
+        correct: good,
+        incorrect: bad,
+        result: generatedChat.toString(),
+        locale
+      })
+    })
+
+    if (!response.ok) {
+      toast.error('ERROR: ' + response.statusText)
+      throw new Error(response.statusText)
+    }
+
+    const data = await response.json()
+    console.log('data', data)
+    if (!data?.id) {
+      toast.error('分享失败，请重试！')
+      return
+    }
+
+    toast.success('生成分享链接成功!')
+    window.open(`${window.location.href}r/${data.id}`)
+  }
+
   return (
     <div className='flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen'>
       <Head>
@@ -153,30 +204,38 @@ const Home: NextPage = () => {
       <main
         className={`flex flex-1 w-full flex-col items-center justify-center px-4 mt-6`}
       >
-        <div className='flex items-center justify-center mb-5'>
-          <a
-            className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mr-3'
-            href='https://github.com/ycjcl868/eslint-gpt'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <Github />
-            <p>Star on GitHub</p>
-          </a>
-          <TwitterShareButton
-            url={'https://eslint.rustc.cloud/'}
-            hashtags={['chatgpt', 'eslint', 'github']}
-          >
-            <TwitterIcon
-              className='fill-[#00aced] opacity-100 hover:opacity-80 transition-opacity'
-              size={32}
-            />
-          </TwitterShareButton>
-        </div>
-        <h1 className='sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900'>
-          <div className='px-4 py-2 sm:mt-3 mt-8 w-full' />
-          <Balancer>{t('description2')}</Balancer>
-        </h1>
+        {!detail?.id && (
+          <div className='flex items-center justify-center mb-5'>
+            <Link
+              className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mr-3'
+              href='https://github.com/ycjcl868/eslint-gpt'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <Github />
+              <p>Star on GitHub</p>
+            </Link>
+            <TwitterShareButton
+              url={'https://eslint.rustc.cloud/'}
+              hashtags={['chatgpt', 'eslint', 'github']}
+            >
+              <TwitterIcon
+                className='fill-[#00aced] opacity-100 hover:opacity-80 transition-opacity'
+                size={32}
+              />
+            </TwitterShareButton>
+          </div>
+        )}
+        {!detail?.id ? (
+          <h1 className='sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900'>
+            <div className='px-4 py-2 sm:mt-3 mt-8 w-full' />
+            <Balancer>{t('description2')}</Balancer>
+          </h1>
+        ) : (
+          <h2 className='text-3xl sm:text-4xl font-semibold font-display'>
+            Browse Rule
+          </h2>
+        )}
         {useNotice && <p className='text-slate-500 mt-5'>{t('notice')}</p>}
         <div className='max-w-xl w-full'>
           {useUserKey && (
@@ -191,7 +250,11 @@ const Home: NextPage = () => {
           )}
 
           <div>
-            <div className='flex mt-10 items-center space-x-3'>
+            <div
+              className={`flex ${
+                detail?.id ? '' : 'mt-10'
+              } items-center space-x-3`}
+            >
               <Image
                 src='/1-black.png'
                 width={30}
@@ -206,7 +269,10 @@ const Home: NextPage = () => {
               value={chat}
               onChange={(e) => setChat(e.target.value)}
               rows={4}
-              className='w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-2'
+              disabled={!!detail?.id}
+              className={`w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-2 ${
+                detail?.id ? 'bg-gray-100' : ''
+              }`}
             />
           </div>
 
@@ -233,6 +299,7 @@ const Home: NextPage = () => {
                   value={bad}
                   onChange={(e) => setBad(e.target.value)}
                   rows={10}
+                  disabled={!!detail?.id}
                   className='bg-[#fff6f6] w-full rounded-md border-gray-300 shadow-sm focus:border-red-400 focus:ring-red-400 my-2'
                 />
               </div>
@@ -245,6 +312,7 @@ const Home: NextPage = () => {
                 <textarea
                   value={good}
                   onChange={(e) => setGood(e.target.value)}
+                  disabled={!!detail?.id}
                   rows={10}
                   className='bg-[#f6fff6] w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 my-2'
                 />
@@ -252,7 +320,7 @@ const Home: NextPage = () => {
             </div>
           </div>
 
-          {!loading && (
+          {!detail?.id && !loading && (
             <button
               className={`rounded-xl font-medium px-4 py-2 sm:mt-10 mt-8 w-full ${
                 disabled
@@ -275,7 +343,7 @@ const Home: NextPage = () => {
           )}
           <br></br>
           <br></br>
-          {!generatedChat && (
+          {!detail?.id && !generatedChat && (
             <div className='mt-1 items-center space-x-3'>
               <span className='text-slate-200'>
                 {t('privacyPolicy1')}
@@ -298,53 +366,13 @@ const Home: NextPage = () => {
           toastOptions={{ duration: 2000 }}
         />
         <hr className='h-px bg-gray-700 border-1 dark:bg-gray-700' />
-        <ResizablePanel>
-          <AnimatePresence mode='wait'>
-            <motion.div className='space-y-10 my-10'>
-              {generatedChat && (
-                <div className='space-y-8 flex flex-col items-center justify-center max-w-3xl mx-auto'>
-                  <div
-                    className='w-full bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border'
-                    onClick={() => {
-                      navigator.clipboard.writeText(generatedChat.trim())
-                      toast(t('copyToast'), {
-                        icon: '✂️'
-                      })
-                    }}
-                  >
-                    {/* <p className="sty1">{generatedChat}</p> */}
-                    <p
-                      className='sty1 markdown-body'
-                      dangerouslySetInnerHTML={{
-                        __html: loading
-                          ? generatedChat.toString()
-                          : marked(generatedChat.toString(), {
-                              gfm: false,
-                              breaks: false,
-                              smartypants: false,
-                              highlight: (code, lang) => {
-                                const realLang = lang || 'javascript'
-                                if (prism.languages[realLang]) {
-                                  return prism.highlight(
-                                    code,
-                                    prism.languages[realLang],
-                                    realLang
-                                  )
-                                } else {
-                                  return code
-                                }
-                              }
-                            })
-                      }}
-                    ></p>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </ResizablePanel>
+        <Result
+          value={generatedChat.toString()}
+          loading={loading}
+          disable={!!detail?.id}
+        />
       </main>
-      <Footer />
+      {detail?.id ? <Banner views={detail?.views} /> : <Footer />}
     </div>
   )
 }
@@ -354,6 +382,7 @@ export default Home
 export async function getStaticProps({ locale }: { locale: string }) {
   return {
     props: {
+      detail: null,
       messages: {
         ...(await import(`../messages/${locale}.json`))
       }

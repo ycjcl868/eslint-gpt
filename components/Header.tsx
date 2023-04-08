@@ -2,7 +2,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslations } from 'next-intl'
-import Github from './GitHub'
+
+const LinkTab = ({ children }) => {
+  return (
+    <div className='relative font-medium text-black-600 before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:bg-indigo-600 before:transition hover:before:scale-x-100'>
+      {children}
+    </div>
+  )
+}
 
 export default function Header() {
   const t = useTranslations('Index')
@@ -23,13 +30,19 @@ export default function Header() {
           {t('title')}
         </h1>
       </Link>
-      <div className='flex gap-2'>
+
+      <div className='flex gap-6'>
+        <LinkTab>
+          <Link href='/explore' locale={otherLocale}>
+            Explore
+          </Link>
+        </LinkTab>
         {otherLocale && (
-          <div className='relative font-medium text-black-600 before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:bg-indigo-600 before:transition hover:before:scale-x-100'>
+          <LinkTab>
             <Link href={route} locale={otherLocale}>
               {t('switchLocale', { locale: otherLocale })}
             </Link>
-          </div>
+          </LinkTab>
         )}
       </div>
     </header>
