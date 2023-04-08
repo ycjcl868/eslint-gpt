@@ -40,8 +40,7 @@ export async function getStaticProps({
       messages: {
         ...(await import(`../../messages/${locale}.json`))
       }
-    },
-    revalidate: 10
+    }
   }
 }
 
