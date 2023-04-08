@@ -48,9 +48,8 @@ const Home: NextPage<{ detail: any }> = (props) => {
     detail?.result || ''
   )
 
-  console.log('Streamed response: ', generatedChat)
+  // console.log('Streamed response: ', generatedChat)
   console.log('locale', locale)
-  console.log('detail', detail)
 
   useView(detail?.id)
   useEffect(() => {
