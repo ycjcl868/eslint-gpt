@@ -21,8 +21,8 @@ export const getAllRules = async ({
   })
   return rules?.map((rule) => ({
     ...rule,
-    updatedAt: rule?.updatedAt.toISOString(),
-    createdAt: rule.createdAt.toISOString()
+    updatedAt: rule?.updatedAt?.toISOString(),
+    createdAt: rule?.createdAt?.toISOString()
   }))
 }
 
@@ -33,7 +33,7 @@ export const getRule = async ({ where, select }: Condition = {}) => {
   })
   return {
     ...rule,
-    updatedAt: rule?.updatedAt.toISOString(),
-    createdAt: rule?.createdAt.toISOString()
+    updatedAt: rule?.updatedAt?.toISOString(),
+    createdAt: rule?.createdAt?.toISOString()
   }
 }
