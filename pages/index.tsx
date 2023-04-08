@@ -152,9 +152,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
         description: chat,
         correct: good,
         incorrect: bad,
-        // result: generatedChat.toString(),
-        result:
-          '```js\nmodule.exports = {\n  rules: {\n    "no-login": {\n      "create": function(context) {\n        return {\n          "Literal": function(node) {\n            if (node.value === "登陆") {\n              context.report({\n                node: node,\n                message: "不允许使用\'登陆\'，建议改成\'登录\'"\n              });\n            }\n          },\n          "TemplateLiteral": function(node) {\n            if (node.quasis.some(quasi => quasi.value.cooked === "登陆")) {\n              context.report({\n                node: node,\n                message: "不允许使用\'登陆\'，建议改成\'登录\'"\n              });\n            }\n          }\n        };\n      }\n    }\n  }\n};\n```',
+        result: generatedChat.toString(),
         locale
       })
     })
