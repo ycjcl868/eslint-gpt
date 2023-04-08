@@ -8,5 +8,22 @@ module.exports = {
   i18n: {
     locales: ['en', 'zh'],
     defaultLocale: 'zh'
+  },
+  async headers() {
+    return [
+      {
+        source: '/:slug',
+        headers: [
+          {
+            key: 'Referrer-Policy',
+            value: 'no-referrer-when-downgrade'
+          },
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on'
+          }
+        ]
+      }
+    ]
   }
 }
