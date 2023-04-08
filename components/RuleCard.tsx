@@ -49,13 +49,6 @@ export default function RuleCard({ data }: { data: any }) {
               {nFormatter(views)} views
             </p>
           </Link>
-          <p className='text-gray-500 text-sm'>|</p>
-          <Link href={`/r/${id}`}>
-            <div className='sm:hidden flex space-x-1 items-center'>
-              <MessageCircle className='h-4 w-4 text-gray-600' />
-              <p className='text-gray-500 text-sm'>{nFormatter(0)}</p>
-            </div>
-          </Link>
         </div>
       </div>
     </motion.li>
