@@ -1,0 +1,84 @@
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+
+model EslintUser {
+  id            String         @id @default(cuid())
+  name          String?
+  username      String?        @unique
+  email         String?        @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  accounts      EslintAccount[]
+  sessions      EslintSession[]
+  lintRules     EslintRule[]
+}
+
+model EslintSession {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         EslintUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model EslintAccount {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String? @db.Text
+  id_token           String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user EslintUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+enum Locale {
+  zh
+  en
+}
+
+model EslintRule {
+  id String @id
+  description String @db.TinyText
+  correct String? @db.MediumText
+  incorrect String? @db.MediumText
+  result String @db.LongText
+  locale    Locale
+
+  private   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  creatorId String?
+  creator   EslintUser?     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  views     Int       @default(0)
+
+  @@index([creatorId])
+  @@index([views(sort: Desc)])
+  @@index([createdAt])
+  @@index([private])
+  @@fulltext([description])
+}
