@@ -232,7 +232,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
             <Balancer>{t('description2')}</Balancer>
           </h1>
         ) : (
-          <h2 className='text-3xl sm:text-4xl font-semibold font-display'>
+          <h2 className='text-3xl sm:text-4xl font-semibold font-display mb-5'>
             Browse Rule
           </h2>
         )}
