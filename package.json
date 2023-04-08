@@ -9,6 +9,7 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write ."
   },
+  "packageManager": "npm@8.19.0",
   "dependencies": {
     "@headlessui/react": "^1.7.12",
     "@headlessui/tailwindcss": "^0.1.2",
