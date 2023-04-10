@@ -16,6 +16,7 @@
     "jsx": "preserve",
     "paths": {
       "@/utils/*": ["./utils/*"],
+      "@/components/*": ["./components/*"],
       "@/hooks/*": ["./hooks/*"]
     },
     "incremental": true

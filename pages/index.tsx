@@ -19,6 +19,7 @@ import { generateSignature } from '../utils/auth'
 import useView from '@/hooks/useView'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
+import { useSignInModal } from '@/hooks/useSignInModal'
 
 const Result = dynamic(() => import('../components/Result'), { ssr: false })
 
@@ -47,6 +48,8 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const [generatedChat, setGeneratedChat] = useState<String>(
     detail?.result || ''
   )
+
+  const { SignInModal, setShowSignInModal } = useSignInModal()
 
   // console.log('Streamed response: ', generatedChat)
   console.log('locale', locale)
@@ -187,191 +190,194 @@ const Home: NextPage<{ detail: any }> = (props) => {
   }
 
   return (
-    <div className='flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen'>
-      <Head>
-        <title>{t('title')}</title>
-        <meta name='description' content={t('description2')} />
-        <meta property='og:site_name' content={t('title')} />
-        <meta property='og:description' content={t('description2')} />
-        <meta property='og:title' content={t('title')} />
-        <meta name='twitter:card' content={t('description2')} />
-        <meta name='twitter:title' content={t('title')} />
-        <meta name='twitter:description' content={t('description2')} />
-      </Head>
+    <div>
+      <SignInModal />
+      <div className='flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen'>
+        <Head>
+          <title>{t('title')}</title>
+          <meta name='description' content={t('description2')} />
+          <meta property='og:site_name' content={t('title')} />
+          <meta property='og:description' content={t('description2')} />
+          <meta property='og:title' content={t('title')} />
+          <meta name='twitter:card' content={t('description2')} />
+          <meta name='twitter:title' content={t('title')} />
+          <meta name='twitter:description' content={t('description2')} />
+        </Head>
 
-      <Header />
-      <main
-        className={`flex flex-1 w-full flex-col items-center justify-center px-4 mt-6`}
-      >
-        {!detail?.id && (
-          <div className='flex items-center justify-center mb-5'>
-            <Link
-              className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mr-3'
-              href='https://github.com/ycjcl868/eslint-gpt'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <Github />
-              <p>Star on GitHub</p>
-            </Link>
-            <TwitterShareButton
-              url={'https://eslint.rustc.cloud/'}
-              hashtags={['chatgpt', 'eslint', 'github']}
-            >
-              <TwitterIcon
-                className='fill-[#00aced] opacity-100 hover:opacity-80 transition-opacity'
-                size={32}
-              />
-            </TwitterShareButton>
-          </div>
-        )}
-        {!detail?.id ? (
-          <h1 className='sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900'>
-            <div className='px-4 py-2 sm:mt-3 mt-8 w-full' />
-            <Balancer>{t('description2')}</Balancer>
-          </h1>
-        ) : (
-          <h2 className='text-3xl sm:text-4xl font-semibold font-display mb-5'>
-            Browse Rule
-          </h2>
-        )}
-        {useNotice && <p className='text-slate-500 mt-5'>{t('notice')}</p>}
-        <div className='max-w-xl w-full'>
-          {useUserKey && (
-            <>
-              <input
-                value={api_key}
-                onChange={(e) => setAPIKey(e.target.value)}
-                className='w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-black focus:ring-black p-2'
-                placeholder={t('openaiApiKeyPlaceholder')}
-              />
-            </>
+        <Header onSignInClick={() => setShowSignInModal(true)} />
+        <main
+          className={`flex flex-1 w-full flex-col items-center justify-center px-4 mt-6`}
+        >
+          {!detail?.id && (
+            <div className='flex items-center justify-center mb-5'>
+              <Link
+                className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mr-3'
+                href='https://github.com/ycjcl868/eslint-gpt'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <Github />
+                <p>Star on GitHub</p>
+              </Link>
+              <TwitterShareButton
+                url={'https://eslint.rustc.cloud/'}
+                hashtags={['chatgpt', 'eslint', 'github']}
+              >
+                <TwitterIcon
+                  className='fill-[#00aced] opacity-100 hover:opacity-80 transition-opacity'
+                  size={32}
+                />
+              </TwitterShareButton>
+            </div>
           )}
-
-          <div>
-            <div
-              className={`flex ${
-                detail?.id ? '' : 'mt-10'
-              } items-center space-x-3`}
-            >
-              <Image
-                src='/1-black.png'
-                width={30}
-                height={30}
-                alt='1 icon'
-                className='mb-5 sm:mb-0'
-              />
-              <p className='text-left font-medium'>{t('step1')} </p>
-            </div>
-
-            <textarea
-              value={chat}
-              onChange={(e) => setChat(e.target.value)}
-              rows={4}
-              disabled={!!detail?.id}
-              className={`w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-2 ${
-                detail?.id ? 'bg-gray-100' : ''
-              }`}
-            />
-          </div>
-
-          <div>
-            <div className='flex mt-5 items-center space-x-3'>
-              <Image
-                src='/2-black.png'
-                width={30}
-                height={30}
-                alt='2 icon'
-                className='mb-5 sm:mb-0'
-              />
-              <p className='text-left font-medium'>{t('step2')} </p>
-            </div>
-
-            <div className='flex space-x-3'>
-              <div className='flex-1 mt-2'>
-                <label className='flex items-center'>
-                  <HandThumbDownIcon className='w-4 h-4 text-red-400' />
-                  &nbsp;
-                  {t('badLabel')}
-                </label>
-                <textarea
-                  value={bad}
-                  onChange={(e) => setBad(e.target.value)}
-                  rows={10}
-                  disabled={!!detail?.id}
-                  className='bg-[#fff6f6] w-full rounded-md border-gray-300 shadow-sm focus:border-red-400 focus:ring-red-400 my-2'
+          {!detail?.id ? (
+            <h1 className='sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900'>
+              <div className='px-4 py-2 sm:mt-3 mt-8 w-full' />
+              <Balancer>{t('description2')}</Balancer>
+            </h1>
+          ) : (
+            <h2 className='text-3xl sm:text-4xl font-semibold font-display mb-5'>
+              Browse Rule
+            </h2>
+          )}
+          {useNotice && <p className='text-slate-500 mt-5'>{t('notice')}</p>}
+          <div className='max-w-xl w-full'>
+            {useUserKey && (
+              <>
+                <input
+                  value={api_key}
+                  onChange={(e) => setAPIKey(e.target.value)}
+                  className='w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-black focus:ring-black p-2'
+                  placeholder={t('openaiApiKeyPlaceholder')}
                 />
-              </div>
-              <div className='flex-1 mt-2'>
-                <label className='flex items-center'>
-                  <HandThumbUpIcon className='w-4 h-4 text-green-400' />
-                  &nbsp;
-                  {t('goodLabel')}
-                </label>
-                <textarea
-                  value={good}
-                  onChange={(e) => setGood(e.target.value)}
-                  disabled={!!detail?.id}
-                  rows={10}
-                  className='bg-[#f6fff6] w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 my-2'
+              </>
+            )}
+
+            <div>
+              <div
+                className={`flex ${
+                  detail?.id ? '' : 'mt-10'
+                } items-center space-x-3`}
+              >
+                <Image
+                  src='/1-black.png'
+                  width={30}
+                  height={30}
+                  alt='1 icon'
+                  className='mb-5 sm:mb-0'
                 />
+                <p className='text-left font-medium'>{t('step1')} </p>
+              </div>
+
+              <textarea
+                value={chat}
+                onChange={(e) => setChat(e.target.value)}
+                rows={4}
+                disabled={!!detail?.id}
+                className={`w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-2 ${
+                  detail?.id ? 'bg-gray-100' : ''
+                }`}
+              />
+            </div>
+
+            <div>
+              <div className='flex mt-5 items-center space-x-3'>
+                <Image
+                  src='/2-black.png'
+                  width={30}
+                  height={30}
+                  alt='2 icon'
+                  className='mb-5 sm:mb-0'
+                />
+                <p className='text-left font-medium'>{t('step2')} </p>
+              </div>
+
+              <div className='flex space-x-3'>
+                <div className='flex-1 mt-2'>
+                  <label className='flex items-center'>
+                    <HandThumbDownIcon className='w-4 h-4 text-red-400' />
+                    &nbsp;
+                    {t('badLabel')}
+                  </label>
+                  <textarea
+                    value={bad}
+                    onChange={(e) => setBad(e.target.value)}
+                    rows={10}
+                    disabled={!!detail?.id}
+                    className='bg-[#fff6f6] w-full rounded-md border-gray-300 shadow-sm focus:border-red-400 focus:ring-red-400 my-2'
+                  />
+                </div>
+                <div className='flex-1 mt-2'>
+                  <label className='flex items-center'>
+                    <HandThumbUpIcon className='w-4 h-4 text-green-400' />
+                    &nbsp;
+                    {t('goodLabel')}
+                  </label>
+                  <textarea
+                    value={good}
+                    onChange={(e) => setGood(e.target.value)}
+                    disabled={!!detail?.id}
+                    rows={10}
+                    className='bg-[#f6fff6] w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 my-2'
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          {!detail?.id && !loading && (
-            <button
-              className={`rounded-xl font-medium px-4 py-2 sm:mt-10 mt-8 w-full ${
+            {!detail?.id && !loading && (
+              <button
+                className={`rounded-xl font-medium px-4 py-2 sm:mt-10 mt-8 w-full ${
+                  disabled
+                    ? 'cursor: not-allowed bg-[#fafafa] border border-[#eaeaea] text-[#888] filter grayscale'
+                    : 'bg-black text-white hover:bg-black/80'
+                }`}
+                onClick={(e) => generateChat(e)}
+                disabled={disabled}
+              >
+                {t('simplifierButton')} &rarr;
+              </button>
+            )}
+            {loading && (
+              <button
+                className='bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full'
                 disabled
-                  ? 'cursor: not-allowed bg-[#fafafa] border border-[#eaeaea] text-[#888] filter grayscale'
-                  : 'bg-black text-white hover:bg-black/80'
-              }`}
-              onClick={(e) => generateChat(e)}
-              disabled={disabled}
-            >
-              {t('simplifierButton')} &rarr;
-            </button>
-          )}
-          {loading && (
-            <button
-              className='bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full'
-              disabled
-            >
-              <LoadingDots color='white' style='large' />
-            </button>
-          )}
-          <br></br>
-          <br></br>
-          {!detail?.id && !generatedChat && (
-            <div className='mt-1 items-center space-x-3'>
-              <span className='text-slate-200'>
-                {t('privacyPolicy1')}
-                <a
-                  className='text-blue-200 hover:text-blue-400'
-                  href='https://github.com/ycjcl868/eslint-gpt/blob/main/privacy.md'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  {' '}
-                  {t('privacyPolicy2')}
-                </a>
-              </span>
-            </div>
-          )}
-        </div>
-        <Toaster
-          position='top-center'
-          reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
-        />
-        <hr className='h-px bg-gray-700 border-1 dark:bg-gray-700' />
-        <Result
-          value={generatedChat.toString()}
-          loading={loading}
-          disable={!!detail?.id}
-        />
-      </main>
-      {detail?.id ? <Banner views={detail?.views} /> : <Footer />}
+              >
+                <LoadingDots color='white' style='large' />
+              </button>
+            )}
+            <br></br>
+            <br></br>
+            {!detail?.id && !generatedChat && (
+              <div className='mt-1 items-center space-x-3'>
+                <span className='text-slate-200'>
+                  {t('privacyPolicy1')}
+                  <a
+                    className='text-blue-200 hover:text-blue-400'
+                    href='https://github.com/ycjcl868/eslint-gpt/blob/main/privacy.md'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    {' '}
+                    {t('privacyPolicy2')}
+                  </a>
+                </span>
+              </div>
+            )}
+          </div>
+          <Toaster
+            position='top-center'
+            reverseOrder={false}
+            toastOptions={{ duration: 2000 }}
+          />
+          <hr className='h-px bg-gray-700 border-1 dark:bg-gray-700' />
+          <Result
+            value={generatedChat.toString()}
+            loading={loading}
+            disable={!!detail?.id}
+          />
+        </main>
+        {detail?.id ? <Banner views={detail?.views} /> : <Footer />}
+      </div>
     </div>
   )
 }

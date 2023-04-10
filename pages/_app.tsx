@@ -1,8 +1,9 @@
+import '../styles/globals.css'
 import { Analytics } from '@vercel/analytics/react'
+import { SessionProvider } from 'next-auth/react'
 import { Provider } from 'react-wrap-balancer'
 import type { AppProps } from 'next/app'
 import { NextIntlProvider } from 'next-intl'
-import '../styles/globals.css'
 import '../styles/markdown.css'
 import 'prismjs'
 import 'prismjs/plugins/toolbar/prism-toolbar.min.css'
@@ -17,14 +18,16 @@ import 'prismjs/components/prism-jsx.min.js'
 import 'prismjs/components/prism-tsx.min.js'
 import 'prismjs/components/prism-typescript.min.js'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <NextIntlProvider messages={pageProps.messages}>
-      <Provider>
-        <Component {...pageProps} />
-      </Provider>
-      <Analytics />
-    </NextIntlProvider>
+    <SessionProvider session={session}>
+      <NextIntlProvider messages={pageProps.messages}>
+        <Provider>
+          <Component {...pageProps} />
+        </Provider>
+        <Analytics />
+      </NextIntlProvider>
+    </SessionProvider>
   )
 }
 
