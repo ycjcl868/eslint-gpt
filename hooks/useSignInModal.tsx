@@ -3,6 +3,7 @@ import { signIn } from 'next-auth/react'
 import { useState, Dispatch, SetStateAction, useCallback, useMemo } from 'react'
 import LoadingDots from '@/components/LoadingDots'
 import Twitter from '@/components/Twitter'
+import Github from '@/components/Github'
 import Image from 'next/image'
 
 const SignInModal = ({
@@ -86,6 +87,27 @@ const SignInModal = ({
               <>
                 <Twitter className='text-[#1DA1F2] w-5 h-5' />
                 <p>Sign In with Twitter</p>
+              </>
+            )}
+          </button>
+          <button
+            disabled={signInClicked}
+            className={`${
+              signInClicked
+                ? 'cursor-not-allowed bg-gray-100 border-gray-200'
+                : 'bg-white text-black border border-gray-200 hover:bg-gray-50'
+            } flex justify-center items-center space-x-3 shadow-sm w-full text-sm h-10 rounded-md border transition-all duration-75 focus:outline-none`}
+            onClick={() => {
+              setSignInClicked(true)
+              signIn('github')
+            }}
+          >
+            {signInClicked ? (
+              <LoadingDots color='#808080' />
+            ) : (
+              <>
+                <Github className='w-5 h-5' />
+                <p>Sign In with Github</p>
               </>
             )}
           </button>

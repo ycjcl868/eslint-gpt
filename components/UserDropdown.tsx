@@ -20,7 +20,7 @@ export default function UserDropdown() {
 
   if (!email && !name) return null
 
-  const displayName = email || name
+  const displayName = email || name || ''
 
   return (
     <motion.div

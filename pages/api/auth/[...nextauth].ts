@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth'
 import TwitterProvider from 'next-auth/providers/twitter'
 import { TwitterLegacyProfile } from 'next-auth/providers/twitter'
 import GoogleProvider from 'next-auth/providers/google'
+import GitHubProvider from 'next-auth/providers/github'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/utils/prisma'
 
@@ -41,6 +42,10 @@ export const authOptions: NextAuthOptions = {
           )
         }
       }
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,
