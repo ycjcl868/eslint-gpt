@@ -3,7 +3,7 @@ import { signIn } from 'next-auth/react'
 import { useState, Dispatch, SetStateAction, useCallback, useMemo } from 'react'
 import LoadingDots from '@/components/LoadingDots'
 import Twitter from '@/components/Twitter'
-import Github from '@/components/Github'
+import Github from '@/components/GitHub'
 import Image from 'next/image'
 
 const SignInModal = ({
