@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-
+import { ratelimit } from '@/utils/upstash'
 import prisma from '@/utils/prisma'
 import { nanoid } from '@/utils/index'
 
@@ -11,6 +11,11 @@ export default async function handler(
     res.status(200).send('OK')
   } else if (req.method === 'POST') {
     try {
+      const { success } = await ratelimit.limit('eslintgpt-save-endpoint')
+      if (!success) {
+        return res.status(429).json({ error: "Don't DDoS me pls 🥺" })
+      }
+
       // const session = await getServerSession(req, res)
       // console.log('session data: ', session)
 

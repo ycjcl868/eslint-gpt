@@ -20,6 +20,8 @@
     "@radix-ui/react-hover-card": "^1.0.2",
     "@radix-ui/react-popover": "^1.0.2",
     "@tailwindcss/forms": "^0.5.3",
+    "@upstash/ratelimit": "^0.4.1",
+    "@upstash/redis": "^1.20.2",
     "@vercel/analytics": "^0.1.10",
     "dotenv": "^16.0.3",
     "eventsource-parser": "^0.0.5",
