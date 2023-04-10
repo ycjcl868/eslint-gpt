@@ -23,6 +23,9 @@ model Account {
   id_token          String? @db.Text
   session_state     String?
 
+  oauth_token_secret String? // for twitter
+  oauth_token        String? // for twitter
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -40,6 +43,7 @@ model User {
   id            String       @id @default(cuid())
   name          String?
   username      String?
+  twitter       String?
   email         String?      @unique
   emailVerified DateTime?
   image         String?

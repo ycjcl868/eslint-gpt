@@ -14,10 +14,13 @@ const FADE_IN_ANIMATION_SETTINGS = {
 
 export default function UserDropdown() {
   const { data: session } = useSession()
-  const { email, image } = session?.user || {}
+  console.log('session', session)
+  const { email, image, name } = session?.user || {}
   const [openPopover, setOpenPopover] = useState(false)
 
-  if (!email) return null
+  if (!email && !name) return null
+
+  const displayName = email || name
 
   return (
     <motion.div
@@ -45,7 +48,7 @@ export default function UserDropdown() {
           className='flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-gray-300 transition-all duration-75 focus:outline-none active:scale-95 sm:h-10 sm:w-10'
         >
           <Image
-            alt={email}
+            alt={displayName}
             src={image || `https://avatars.dicebear.com/api/micah/${email}.svg`}
             width={40}
             height={40}

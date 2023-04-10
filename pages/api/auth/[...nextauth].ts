@@ -23,25 +23,25 @@ export const authOptions: NextAuthOptions = {
           image: profile.picture
         }
       }
+    }),
+    TwitterProvider({
+      clientId: process.env.TWITTER_CLIENT_ID as string,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
+      profile(profile: TwitterLegacyProfile) {
+        return {
+          id: profile.id_str,
+          name: profile.name,
+          username: profile.screen_name,
+          twitter: profile.screen_name,
+          // @ts-ignore
+          email: profile.email && profile.email != '' ? profile.email : null,
+          image: profile.profile_image_url_https.replace(
+            /_normal\.(jpg|png|gif)$/,
+            '.$1'
+          )
+        }
+      }
     })
-    // TwitterProvider({
-    //   clientId: process.env.TWITTER_CLIENT_ID as string,
-    //   clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
-    //   profile(profile: TwitterLegacyProfile) {
-    //     return {
-    //       id: profile.id_str,
-    //       name: profile.name,
-    //       username: profile.screen_name,
-    //       twitter: profile.screen_name,
-    //       // @ts-ignore
-    //       email: profile.email && profile.email != '' ? profile.email : null,
-    //       image: profile.profile_image_url_https.replace(
-    //         /_normal\.(jpg|png|gif)$/,
-    //         '.$1'
-    //       )
-    //     }
-    //   }
-    // })
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
