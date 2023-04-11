@@ -45,7 +45,10 @@ export const authOptions: NextAuthOptions = {
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string
+      clientSecret: process.env.GITHUB_SECRET as string,
+      httpOptions: {
+        timeout: 8000
+      }
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,

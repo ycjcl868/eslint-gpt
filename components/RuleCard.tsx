@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 import Link from 'next/link'
 import { nFormatter, timeAgo } from '@/utils/index'
-import { Eye, MessageCircle } from 'lucide-react'
+import { Eye } from 'lucide-react'
 
 export default function RuleCard({ data }: { data: any }) {
   let { id, description, creator, views, createdAt } = data
   const avatar = 'https://avatar.vercel.sh/${id};'
+  console.log('data', data)
 
   return (
     <motion.li
@@ -24,7 +24,7 @@ export default function RuleCard({ data }: { data: any }) {
           <h3>{description}</h3>
         </Link>
         <div className='flex items-center space-x-2'>
-          <Image
+          <img
             width='20'
             height='20'
             alt='Avatar'

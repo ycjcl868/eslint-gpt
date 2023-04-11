@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { ratelimit } from '@/utils/upstash'
 import prisma from '@/utils/prisma'
 import { nanoid } from '@/utils/index'
+import { getServerSession } from '@/utils/auth'
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,8 +17,12 @@ export default async function handler(
         return res.status(429).json({ error: "Don't DDoS me pls 🥺" })
       }
 
-      // const session = await getServerSession(req, res)
-      // console.log('session data: ', session)
+      const session = await getServerSession(req, res)
+      console.log('session data: ', session)
+      if (!session) {
+        res.status(401).json({ message: 'You must be logged in.' })
+        return
+      }
 
       const response = await saveEslintRule(req.body)
       return res.status(200).json(response)
