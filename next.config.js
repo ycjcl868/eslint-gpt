@@ -14,6 +14,8 @@ module.exports = {
       'avatars.dicebear.com',
       'pbs.twimg.com',
       'abs.twimg.com',
+      'avatars.githubusercontent.com',
+      'googleusercontent.com',
       'cdn.auth0.com'
     ]
   },
