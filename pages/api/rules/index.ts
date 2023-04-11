@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { ratelimit } from '@/utils/upstash'
 import prisma from '@/utils/prisma'
 import { nanoid } from '@/utils/index'
-import { getServerSession } from '@/utils/auth'
+import { getServerSession } from '@/utils/session'
 
 export default async function handler(
   req: NextApiRequest,

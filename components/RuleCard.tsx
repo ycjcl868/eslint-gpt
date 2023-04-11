@@ -6,7 +6,6 @@ import { Eye } from 'lucide-react'
 export default function RuleCard({ data }: { data: any }) {
   let { id, description, creator, views, createdAt } = data
   const avatar = 'https://avatar.vercel.sh/${id};'
-  console.log('data', data)
 
   return (
     <motion.li
