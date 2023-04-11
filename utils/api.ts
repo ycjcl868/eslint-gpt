@@ -13,33 +13,30 @@ export const getAllRules = async ({
   where,
   select,
   orderBy,
-  take
+  take,
+  include
 }: Condition = {}) => {
   const rules = await prisma.eslintRule.findMany({
     ...(where && { where }),
     ...(select && { select }),
     ...(orderBy && { orderBy }),
-    include: {
-      creator: true
-    },
+    ...(include && { include }),
     take
   })
   return rules?.map((rule) => {
     return {
       ...rule,
       // @ts-ignore
-      ...(rule.creator
-        ? {
-            creator: {
-              // @ts-ignore
-              ...rule.creator,
-              // @ts-ignore
-              updatedAt: rule.creator?.updatedAt?.toISOString(),
-              // @ts-ignore
-              createdAt: rule.creator?.createdAt?.toISOString()
-            }
-          }
-        : {}),
+      ...(rule.creator && {
+        creator: {
+          // @ts-ignore
+          ...rule.creator,
+          // @ts-ignore
+          updatedAt: rule.creator?.updatedAt?.toISOString(),
+          // @ts-ignore
+          createdAt: rule.creator?.createdAt?.toISOString()
+        }
+      }),
       updatedAt: rule?.updatedAt?.toISOString(),
       createdAt: rule?.createdAt?.toISOString()
     }

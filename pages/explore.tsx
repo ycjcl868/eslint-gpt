@@ -37,7 +37,10 @@ export async function getStaticProps({ locale }: { locale: string }) {
     orderBy: {
       views: 'desc'
     },
-    take: 10
+    take: 10,
+    include: {
+      creator: true
+    }
   })
 
   return {
