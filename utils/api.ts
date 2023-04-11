@@ -1,4 +1,5 @@
 import prisma from '@/utils/prisma'
+import { Prisma } from '@prisma/client'
 
 interface Condition {
   where?: any
@@ -12,23 +13,37 @@ export const getAllRules = async ({
   where,
   select,
   orderBy,
-  take,
-  include
+  take
 }: Condition = {}) => {
   const rules = await prisma.eslintRule.findMany({
     ...(where && { where }),
     ...(select && { select }),
     ...(orderBy && { orderBy }),
-    ...(include && { include }),
+    include: {
+      creator: true
+    },
     take
   })
-  return rules?.map((rule) => ({
-    ...rule,
-    // @ts-ignore
-    creator: JSON.parse(JSON.stringify(rule?.creator)),
-    updatedAt: rule?.updatedAt?.toISOString(),
-    createdAt: rule?.createdAt?.toISOString()
-  }))
+  return rules?.map((rule) => {
+    return {
+      ...rule,
+      // @ts-ignore
+      ...(rule.creator
+        ? {
+            creator: {
+              // @ts-ignore
+              ...rule.creator,
+              // @ts-ignore
+              updatedAt: rule.creator?.updatedAt?.toISOString(),
+              // @ts-ignore
+              createdAt: rule.creator?.createdAt?.toISOString()
+            }
+          }
+        : {}),
+      updatedAt: rule?.updatedAt?.toISOString(),
+      createdAt: rule?.createdAt?.toISOString()
+    }
+  })
 }
 
 export const getRule = async ({ where, select }: Condition = {}) => {
