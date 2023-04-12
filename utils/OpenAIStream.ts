@@ -19,24 +19,14 @@ export interface ChatGPTCompletionRequest extends CreateCompletionRequest {
 export const isTurboModel = (model: string) =>
   ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301'].includes(model)
 
-function randomNumberInRange(min, max) {
-  // 👇️ 获取 min（含）和 max（含）之间的数字
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
 export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
   var keys = process.env.OPENAI_API_KEY || ''
-  const apikeys = keys?.split(',')
-  const randomNumber = randomNumberInRange(0, apikeys.length - 1)
-  const newapikey = apikeys[randomNumber]
-
-  console.log('randomNumber', randomNumber)
 
   let counter = 0
 
-  const openai_api_key = newapikey
+  const [openai_api_key] = keys.split(',').sort(() => Math.random() - 0.5)
   console.log('prompt', payload.prompt)
   console.log('message', payload.messages)
   console.log('openai_api_key', openai_api_key)
