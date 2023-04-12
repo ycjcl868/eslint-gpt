@@ -41,7 +41,7 @@ export default function Banner({
         </a>
       </div>
       <div className='border-l border-gray-200 h-12 w-1' />
-      <SaveButton onSave={onSave} setId={setId} />
+      {!detail && <SaveButton onSave={onSave} setId={setId} />}
       {id && (
         <button
           ref={copyRef}
