@@ -4,12 +4,19 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-hot-toast'
 import { useEffect, useState, useRef } from 'react'
 import { nFormatter } from '@/utils/index'
+import SaveButton from '@/components/SaveButton'
 
-export default function Banner({ views }: { views: number }) {
+export default function Banner({
+  detail,
+  onSave
+}: {
+  detail: any
+  onSave: any
+}) {
   const router = useRouter()
   const copyRef = useRef<HTMLButtonElement | null>(null)
-  const { id } = router.query as { id: string }
   const [copied, setCopied] = useState(false)
+  const [id, setId] = useState(router?.query?.id)
 
   useEffect(() => {
     copyRef?.current?.focus()
@@ -34,30 +41,37 @@ export default function Banner({ views }: { views: number }) {
         </a>
       </div>
       <div className='border-l border-gray-200 h-12 w-1' />
-      <button
-        ref={copyRef}
-        onClick={() =>
-          navigator.clipboard
-            .writeText(`https://eslint.rustc.cloud/r/${id}`)
-            .then(() => {
-              toast.success('Link copied to clipboard')
-              setCopied(true)
-              setTimeout(() => setCopied(false), 2000)
-            })
-        }
-        className='p-2 flex flex-col space-y-1 items-center rounded-md w-12 hover:bg-gray-100 active:bg-gray-200 transition-all'
-      >
-        {copied ? (
-          <Check className='h-4 w-4 text-green-600' />
-        ) : (
-          <LinkIcon className='h-4 w-4 text-gray-600' />
-        )}
-        <p className='text-center text-gray-600 text-sm'>Copy</p>
-      </button>
-      <div className='cursor-default p-2 flex flex-col space-y-1 items-center rounded-md w-12 hover:bg-gray-100 active:bg-gray-200 transition-all'>
-        <Eye className='h-4 w-4 text-gray-600' />
-        <p className='text-center text-gray-600 text-sm'>{nFormatter(views)}</p>
-      </div>
+      <SaveButton onSave={onSave} setId={setId} />
+      {id && (
+        <button
+          ref={copyRef}
+          onClick={() =>
+            navigator.clipboard
+              .writeText(`https://eslint.rustc.cloud/r/${id}`)
+              .then(() => {
+                toast.success('Link copied to clipboard')
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              })
+          }
+          className='p-2 flex flex-col space-y-1 items-center rounded-md w-12 hover:bg-gray-100 active:bg-gray-200 transition-all'
+        >
+          {copied ? (
+            <Check className='h-4 w-4 text-green-600' />
+          ) : (
+            <LinkIcon className='h-4 w-4 text-gray-600' />
+          )}
+          <p className='text-center text-gray-600 text-sm'>Copy</p>
+        </button>
+      )}
+      {detail && (
+        <div className='cursor-default p-2 flex flex-col space-y-1 items-center rounded-md w-12 hover:bg-gray-100 active:bg-gray-200 transition-all'>
+          <Eye className='h-4 w-4 text-gray-600' />
+          <p className='text-center text-gray-600 text-sm'>
+            {nFormatter(detail?.views)}
+          </p>
+        </div>
+      )}
     </div>
   )
 }

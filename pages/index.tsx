@@ -45,13 +45,14 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const [good, setGood] = useState(detail?.correct || GOOD_PLACEHOLDER)
   const [bad, setBad] = useState(detail?.incorrect || BAD_PLACEHOLDER)
   const [api_key, setAPIKey] = useState('')
+
   const [generatedChat, setGeneratedChat] = useState<String>(
     detail?.result || ''
   )
 
   const { SignInModal, setShowSignInModal } = useSignInModal()
 
-  // console.log('Streamed response: ', generatedChat)
+  console.log('Streamed response: ', generatedChat)
   console.log('locale', locale)
 
   useView(detail?.id)
@@ -157,7 +158,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
 
   const disabled = !chat
 
-  const handleSharing = async () => {
+  const handleSave = async () => {
     const response = await fetchWithTimeout('/api/rules', {
       method: 'POST',
       headers: {
@@ -168,7 +169,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
         description: chat,
         correct: good,
         incorrect: bad,
-        result: generatedChat.toString(),
+        result: generatedChat,
         locale
       })
     })
@@ -179,14 +180,13 @@ const Home: NextPage<{ detail: any }> = (props) => {
     }
 
     const data = await response.json()
-    console.log('data', data)
     if (!data?.id) {
-      toast.error('分享失败，请重试！')
+      toast.error('保存失败，请重试！')
       return
     }
+    toast.success('保存成功')
 
-    toast.success('生成分享链接成功!')
-    window.open(`${window.location.href}r/${data.id}`)
+    return data
   }
 
   return (
@@ -371,12 +371,16 @@ const Home: NextPage<{ detail: any }> = (props) => {
           />
           <hr className='h-px bg-gray-700 border-1 dark:bg-gray-700' />
           <Result
-            value={generatedChat.toString()}
+            value={`${generatedChat}`}
             loading={loading}
             disable={!!detail?.id}
           />
         </main>
-        {detail?.id ? <Banner views={detail?.views} /> : <Footer />}
+        {generatedChat && !loading ? (
+          <Banner detail={detail} onSave={handleSave} />
+        ) : (
+          <Footer />
+        )}
       </div>
     </div>
   )

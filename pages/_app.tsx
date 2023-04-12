@@ -1,3 +1,4 @@
+import { GeistProvider } from '@geist-ui/core'
 import '../styles/globals.css'
 import { Analytics } from '@vercel/analytics/react'
 import { SessionProvider } from 'next-auth/react'
@@ -22,10 +23,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <NextIntlProvider messages={pageProps.messages}>
-        <Provider>
-          <Component {...pageProps} />
-        </Provider>
-        <Analytics />
+        <GeistProvider>
+          <Provider>
+            <Component {...pageProps} />
+          </Provider>
+          <Analytics />
+        </GeistProvider>
       </NextIntlProvider>
     </SessionProvider>
   )

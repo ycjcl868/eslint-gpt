@@ -34,6 +34,9 @@ const Explore: React.FunctionComponent<ExploreProps> = (props) => {
 
 export async function getStaticProps({ locale }: { locale: string }) {
   const rules = await getAllRules({
+    where: {
+      private: false
+    },
     orderBy: {
       views: 'desc'
     },

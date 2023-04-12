@@ -23,7 +23,7 @@ const Result: React.FC<ResultProps> = ({ value, loading, disable }) => {
               >
                 <p
                   className='sty1 markdown-body'
-                  contentEditable={!loading}
+                  contentEditable={!disable && !loading}
                   dangerouslySetInnerHTML={{
                     __html: loading
                       ? value.toString()

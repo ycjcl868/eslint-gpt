@@ -76,7 +76,7 @@ model EslintRule {
   result      String  @db.LongText
   locale      Locale
 
-  private   Boolean  @default(false)
+  private   Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   creatorId String?

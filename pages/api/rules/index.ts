@@ -24,7 +24,11 @@ export default async function handler(
         return
       }
 
-      const response = await saveEslintRule(req.body)
+      const body = {
+        ...req.body,
+        userId: session.user.id
+      }
+      const response = await saveEslintRule(body)
       return res.status(200).json(response)
     } catch (error: unknown) {
       console.log('Error saving lint rule: ', error)
@@ -36,7 +40,7 @@ export default async function handler(
 }
 
 async function saveEslintRule(params: {
-  userId?: string | null
+  userId: string | null
   description: string
   correct?: string
   incorrect?: string
@@ -54,7 +58,7 @@ async function saveEslintRule(params: {
         result,
         ...(correct && { correct }),
         ...(incorrect && { incorrect }),
-        ...(userId && { userId })
+        ...(userId && { creatorId: userId })
       }
     })
     return { id }
