@@ -9,6 +9,22 @@ ESLint GPT is an innovative project that combines the power of OpenAI's GPT mode
 
 ESLint GPT is a project that uses OpenAI's GPT model to generate custom ESLint rules. With the help of Vercel Edge Functions, the generated rules can be easily integrated into any project. This project is perfect for developers who want to customize their ESLint rules based on their specific needs.
 
+### Login
+
+![](https://user-images.githubusercontent.com/13595509/231453712-0ed9df97-05b2-469c-8c06-458ab47f4b4a.png)
+
+### Save Rule
+
+![](https://user-images.githubusercontent.com/13595509/231453228-247ac0aa-5057-4ad0-aea7-c8848f2f9ade.png)
+
+### Sharing Rule
+
+![](https://user-images.githubusercontent.com/13595509/231453277-d8cd5ce1-e46f-40ca-ae23-ed05e9dbd667.png)
+
+### Delete Rule
+
+TODO
+
 ## Getting Started
 
 To get started with ESLint GPT, you will need to have an OpenAI API key and a Vercel account. Once you have these, you can simply clone the project and follow the instructions in the README file.
