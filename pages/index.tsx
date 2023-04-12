@@ -26,7 +26,7 @@ const Result = dynamic(() => import('../components/Result'), { ssr: false })
 const useUserKey = process.env.NEXT_PUBLIC_USE_USER_KEY === 'true'
 const useNotice = process.env.NEXT_NOTICE === 'true'
 
-const REQUEST_TIMEOUT = 10 * 1000 // 10s timeout
+const REQUEST_TIMEOUT = 15 * 1000
 const GOOD_PLACEHOLDER =
   "const id = '1234';\nconst rawText = '账户';\nconst rawText1 = `账户: ${id}`;\nconst rawText2 = '账号';\nconst rawText3 = `账号: ${id}`;"
 const BAD_PLACEHOLDER =
