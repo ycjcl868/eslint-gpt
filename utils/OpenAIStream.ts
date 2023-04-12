@@ -19,24 +19,27 @@ export interface ChatGPTCompletionRequest extends CreateCompletionRequest {
 export const isTurboModel = (model: string) =>
   ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301'].includes(model)
 
+function randomNumberInRange(min, max) {
+  // 👇️ 获取 min（含）和 max（含）之间的数字
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
 export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
-  function randomNumberInRange(min, max) {
-    // 👇️ 获取 min（含）和 max（含）之间的数字
-    return Math.floor(Math.random() * (max - min + 1)) + min
-  }
   var keys = process.env.OPENAI_API_KEY || ''
   const apikeys = keys?.split(',')
   const randomNumber = randomNumberInRange(0, apikeys.length - 1)
   const newapikey = apikeys[randomNumber]
 
+  console.log('randomNumber', randomNumber)
+
   let counter = 0
 
-  var openai_api_key = process.env.OPENAI_API_KEY
-  openai_api_key = newapikey
+  const openai_api_key = newapikey
   console.log('prompt', payload.prompt)
   console.log('message', payload.messages)
+  console.log('openai_api_key', openai_api_key)
 
   function checkString(str: string) {
     var pattern = /^sk-[A-Za-z0-9]{48}$/
@@ -46,7 +49,6 @@ export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
     throw new Error('OpenAI API Key Format Error')
   }
 
-  console.log('openai_api_key', openai_api_key)
   const res = await fetch(
     'https://api.openai.com/v1' +
       (isTurboModel(payload.model) ? '/chat/completions' : '/completions'),
