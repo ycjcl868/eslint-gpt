@@ -46,6 +46,7 @@ export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
     throw new Error('OpenAI API Key Format Error')
   }
 
+  console.log('openai_api_key', openai_api_key)
   const res = await fetch(
     'https://api.openai.com/v1' +
       (isTurboModel(payload.model) ? '/chat/completions' : '/completions'),
