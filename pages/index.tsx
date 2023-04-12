@@ -174,12 +174,13 @@ const Home: NextPage<{ detail: any }> = (props) => {
       })
     })
 
-    if (!response.ok) {
-      toast.error('ERROR: ' + response.statusText)
-      throw new Error(response.statusText)
+    const data = await response.json()
+    if (response.status !== 200) {
+      const errMsg = data?.message || `ERROR: ${response.statusText}`
+      toast.error(errMsg)
+      throw new Error(errMsg)
     }
 
-    const data = await response.json()
     if (!data?.id) {
       toast.error('保存失败，请重试！')
       return

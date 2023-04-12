@@ -50,6 +50,16 @@ async function saveEslintRule(params: {
   const { userId, description, correct, incorrect, locale, result } = params
   const id = nanoid()
   try {
+    const existed = await prisma.eslintRule.findFirst({
+      where: {
+        description
+      }
+    })
+
+    if (existed) {
+      throw new Error('existed rule')
+    }
+
     await prisma.eslintRule.create({
       data: {
         id,
