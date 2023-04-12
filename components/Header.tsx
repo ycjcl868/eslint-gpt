@@ -51,7 +51,7 @@ export default function Header(props) {
       <div className='flex gap-6'>
         <LinkTab>
           <Link href='/explore' locale={otherLocale}>
-            Explore
+            {t('explore')}
           </Link>
         </LinkTab>
         {otherLocale && (

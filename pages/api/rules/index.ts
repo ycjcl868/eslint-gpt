@@ -30,9 +30,11 @@ export default async function handler(
       }
       const response = await saveEslintRule(body)
       return res.status(200).json(response)
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.log('Error saving lint rule: ', error)
-      return res.status(500).json({ message: 'Error saving the lint rule.' })
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Error saving the lint rule.' })
     }
   } else {
     res.status(405).json({ error: 'Method not allowed' })
@@ -57,7 +59,7 @@ async function saveEslintRule(params: {
     })
 
     if (existed) {
-      throw new Error('existed rule')
+      throw new Error('The same description rules existed!')
     }
 
     await prisma.eslintRule.create({
