@@ -3,6 +3,7 @@ import { signIn } from 'next-auth/react'
 import { useState, Dispatch, SetStateAction, useCallback, useMemo } from 'react'
 import LoadingDots from '@/components/LoadingDots'
 import Twitter from '@/components/Twitter'
+import Chrome from '@/components/Chrome'
 import Github from '@/components/GitHub'
 import Image from 'next/image'
 
@@ -59,12 +60,7 @@ const SignInModal = ({
               <LoadingDots color='#808080' />
             ) : (
               <>
-                <Image
-                  alt='Chrome logo'
-                  src='/chrome.svg'
-                  width={20}
-                  height={20}
-                />
+                <Chrome className='w-5 h-5' />
                 <p>Sign In with Google</p>
               </>
             )}
