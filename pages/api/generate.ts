@@ -80,14 +80,13 @@ const handler = async (req: Request): Promise<Response> => {
 
   const payload: ChatGPTCompletionRequest = {
     model: process.env.OPENAI_MODEL,
-    temperature: 0.7,
+    temperature: 0.6,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 1536,
+    max_tokens: 2000,
     stream: true,
-    n: 1,
-    stop: ['<|im_end|>']
+    n: 1
   }
 
   if (isTurboModel(payload.model)) {
