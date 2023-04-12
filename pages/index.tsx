@@ -133,6 +133,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
 
     if (!response.ok) {
       toast.error('ERROR: ' + response.statusText)
+      setLoading(false)
       throw new Error(response.statusText)
     }
 
