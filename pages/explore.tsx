@@ -32,7 +32,7 @@ const Explore: React.FunctionComponent<ExploreProps> = (props) => {
   )
 }
 
-export async function getStaticProps({ locale }: { locale: string }) {
+export async function getServerSideProps({ locale }: { locale: string }) {
   const rules = await getAllRules({
     where: {
       private: false
