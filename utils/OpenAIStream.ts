@@ -40,7 +40,7 @@ export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
   }
 
   const res = await fetch(
-    'https://api.openai.com/v1' +
+    `${process.env.OPENAI_HOST || 'https://api.openai.com'}/v1` +
       (isTurboModel(payload.model) ? '/chat/completions' : '/completions'),
     {
       headers: {
