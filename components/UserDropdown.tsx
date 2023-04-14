@@ -5,6 +5,7 @@ import Popover from './Popover'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
+import { useTranslations } from 'next-intl'
 
 const FADE_IN_ANIMATION_SETTINGS = {
   initial: { opacity: 0 },
@@ -15,6 +16,7 @@ const FADE_IN_ANIMATION_SETTINGS = {
 
 export default function UserDropdown() {
   const { data: session } = useSession()
+  const t = useTranslations('Index')
   const router = useRouter()
   const { email, image, name } = session?.user || {}
   const [openPopover, setOpenPopover] = useState(false)
@@ -36,7 +38,7 @@ export default function UserDropdown() {
               onClick={() => router.push('/my/rules')}
             >
               <Ruler className='h-4 w-4' />
-              <p className='text-sm'>My Rules</p>
+              <p className='text-sm'>{t('myRules')}</p>
             </button>
             <button
               className='flex items-center justify-start space-x-2 relative w-full rounded-md p-2 text-left text-sm transition-all duration-75 hover:bg-gray-100'

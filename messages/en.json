@@ -28,6 +28,10 @@
     "copyToast": "README copied to clipboard",
     "timeout": "Request timeout, please try again",
     "explore": "Explore",
-    "ruleExamples": "Browse Examples"
+    "myRules": "My Rules",
+    "ruleExamples": "Browse Examples",
+    "saveSuccessToast": "Save success",
+    "saveFailToast": "Save failed, please try again",
+    "setPrivateSuccessToast": "Set success"
   }
 }

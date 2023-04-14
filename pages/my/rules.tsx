@@ -4,6 +4,7 @@ import React from 'react'
 import Header from '@/components/Header'
 import { getAllRules } from '@/utils/api'
 import RuleCard from '@/components/RuleCard'
+import { useTranslations } from 'next-intl'
 
 export interface ExploreProps {
   rules: any[]
@@ -11,6 +12,7 @@ export interface ExploreProps {
 
 const MyRules: React.FunctionComponent<ExploreProps> = (props) => {
   const { rules } = props
+  const t = useTranslations('Index')
 
   return (
     <div className='mx-auto py-2 min-h-screen'>
@@ -21,7 +23,7 @@ const MyRules: React.FunctionComponent<ExploreProps> = (props) => {
         className={`flex flex-1 w-full flex-col items-center justify-center px-4 mt-6`}
       >
         <h2 className='text-3xl sm:text-4xl font-semibold font-display'>
-          My Rules
+          {t('myRules')}
         </h2>
         <div className='max-w-xl w-full'>
           <ul className='mt-8 grid gap-2'>
@@ -59,7 +61,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       creatorId: session.user.id
     },
     orderBy: {
-      views: 'desc'
+      createdAt: 'desc'
     },
     include: {
       creator: true

@@ -183,10 +183,10 @@ const Home: NextPage<{ detail: any }> = (props) => {
     }
 
     if (!data?.id) {
-      toast.error('保存失败，请重试！')
+      toast.error(t('saveFailToast'))
       return
     }
-    toast.success('保存成功')
+    toast.success(t('saveSuccessToast'))
 
     return data
   }

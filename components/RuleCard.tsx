@@ -6,8 +6,10 @@ import { nFormatter, timeAgo } from '@/utils/index'
 import { Eye } from 'lucide-react'
 import { useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
+import { useTranslations } from 'next-intl'
 
 export default function RuleCard({ data, showPrivate, initalChecked }: any) {
+  const t = useTranslations('Index')
   let { id, description, creator, views, createdAt } = data
   const avatar = 'https://avatar.vercel.sh/${id};'
 
@@ -33,7 +35,7 @@ export default function RuleCard({ data, showPrivate, initalChecked }: any) {
         throw new Error('ERROR')
       }
       console.log('success')
-      toast.success(`Set ${rulePublic ? 'public' : 'private'} success!`)
+      toast.success(t('setPrivateSuccessToast'))
     } catch (e) {
       setChecked(initalChecked)
     } finally {
