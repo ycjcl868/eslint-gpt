@@ -39,9 +39,14 @@ export async function getServerSideProps({ locale }: { locale: string }) {
     where: {
       private: false
     },
-    orderBy: {
-      views: 'desc'
-    },
+    orderBy: [
+      {
+        views: 'desc'
+      },
+      {
+        createdAt: 'desc'
+      }
+    ],
     take: 10,
     include: {
       creator: true

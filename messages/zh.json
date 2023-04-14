@@ -16,7 +16,7 @@
     "privacyPolicy1": "请勿上传过于隐私的内容，详情查看",
     "privacyPolicy2": "《隐私声明》",
     "paragraphForm": "段落",
-    "prompt": "请帮我写一个 eslint 规则，只需要给出规则代码，规则要求：{description}。",
+    "prompt": "请帮我写一个 eslint 规则，只需要给出规则代码（包含 name, meta, create），规则要求：{description}。",
     "code_tip": "规则校验正确代码通过，错误代码不通过，以下是正确和错误代码示例：",
     "good": "\n\n// 正确\n```js\n{code}\n```",
     "bad": "\n\n// 错误\n```js\n{code}\n```",

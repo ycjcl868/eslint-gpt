@@ -20,6 +20,7 @@ import useView from '@/hooks/useView'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useSignInModal } from '@/hooks/useSignInModal'
+import { useSession } from 'next-auth/react'
 
 const Result = dynamic(() => import('../components/Result'), { ssr: false })
 
@@ -36,6 +37,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const t = useTranslations('Index')
   const locale = useLocale()
   const router = useRouter()
+  const { data: session } = useSession()
   const { id } = router.query
 
   const detail = id && props.detail ? props.detail : null
@@ -158,6 +160,9 @@ const Home: NextPage<{ detail: any }> = (props) => {
   }
 
   const disabled = !chat
+  // @ts-ignore
+  const isOwner = detail?.id && detail?.creatorId === session?.user?.id
+  console.log('isOwner', isOwner)
 
   const handleSave = async () => {
     const response = await fetchWithTimeout('/api/rules', {
@@ -196,13 +201,22 @@ const Home: NextPage<{ detail: any }> = (props) => {
       <SignInModal />
       <div className='flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen'>
         <Head>
-          <title>{t('title')}</title>
+          <title>{detail?.description || t('title')}</title>
           <meta name='description' content={t('description2')} />
-          <meta property='og:site_name' content={t('title')} />
+          <meta
+            property='og:site_name'
+            content={detail?.description || t('title')}
+          />
           <meta property='og:description' content={t('description2')} />
-          <meta property='og:title' content={t('title')} />
+          <meta
+            property='og:title'
+            content={detail?.description || t('title')}
+          />
           <meta name='twitter:card' content={t('description2')} />
-          <meta name='twitter:title' content={t('title')} />
+          <meta
+            name='twitter:title'
+            content={detail?.description || t('title')}
+          />
           <meta name='twitter:description' content={t('description2')} />
         </Head>
 
@@ -275,7 +289,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
                 value={chat}
                 onChange={(e) => setChat(e.target.value)}
                 rows={4}
-                disabled={!!detail?.id}
+                disabled={!isOwner}
                 className={`w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-2 ${
                   detail?.id ? 'bg-gray-100' : ''
                 }`}
@@ -305,7 +319,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
                     value={bad}
                     onChange={(e) => setBad(e.target.value)}
                     rows={10}
-                    disabled={!!detail?.id}
+                    disabled={!isOwner}
                     className='bg-[#fff6f6] w-full rounded-md border-gray-300 shadow-sm focus:border-red-400 focus:ring-red-400 my-2'
                   />
                 </div>
@@ -318,7 +332,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
                   <textarea
                     value={good}
                     onChange={(e) => setGood(e.target.value)}
-                    disabled={!!detail?.id}
+                    disabled={isOwner}
                     rows={10}
                     className='bg-[#f6fff6] w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 my-2'
                   />
@@ -375,7 +389,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
           <Result
             value={`${generatedChat}`}
             loading={loading}
-            disable={!!detail?.id}
+            disable={!isOwner}
           />
         </main>
         {generatedChat && !loading ? (
