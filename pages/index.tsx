@@ -332,7 +332,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
                   <textarea
                     value={good}
                     onChange={(e) => setGood(e.target.value)}
-                    disabled={isOwner}
+                    disabled={detail?.id ? !isOwner : false}
                     rows={10}
                     className='bg-[#f6fff6] w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 my-2'
                   />
