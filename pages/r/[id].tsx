@@ -14,7 +14,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-export async function getStaticProps({
+export async function getServerSideProps({
   locale,
   params: { id }
 }: {
