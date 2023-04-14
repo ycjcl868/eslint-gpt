@@ -389,7 +389,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
           <Result
             value={`${generatedChat}`}
             loading={loading}
-            disable={!isOwner}
+            disable={detail?.id ? !isOwner : false}
           />
         </main>
         {generatedChat && !loading ? (
