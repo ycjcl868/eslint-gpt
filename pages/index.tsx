@@ -289,7 +289,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
                 value={chat}
                 onChange={(e) => setChat(e.target.value)}
                 rows={4}
-                disabled={!isOwner}
+                disabled={detail?.id ? !isOwner : false}
                 className={`w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-2 ${
                   detail?.id ? 'bg-gray-100' : ''
                 }`}
@@ -319,7 +319,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
                     value={bad}
                     onChange={(e) => setBad(e.target.value)}
                     rows={10}
-                    disabled={!isOwner}
+                    disabled={detail?.id ? !isOwner : false}
                     className='bg-[#fff6f6] w-full rounded-md border-gray-300 shadow-sm focus:border-red-400 focus:ring-red-400 my-2'
                   />
                 </div>
