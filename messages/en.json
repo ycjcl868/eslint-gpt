@@ -32,6 +32,7 @@
     "ruleExamples": "Browse Examples",
     "saveSuccessToast": "Save success",
     "saveFailToast": "Save failed, please try again",
+    "saveBtnText": "Save",
     "setPrivateSuccessToast": "Set success"
   }
 }

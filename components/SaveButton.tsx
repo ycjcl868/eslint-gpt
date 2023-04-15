@@ -4,6 +4,7 @@ import { useSignInModal } from '@/hooks/useSignInModal'
 import { useSession } from 'next-auth/react'
 import { Bookmark } from 'lucide-react'
 import { useRef } from 'react'
+import { useTranslations } from 'next-intl'
 
 export default function SaveButton({
   onSave,
@@ -12,6 +13,7 @@ export default function SaveButton({
   onSave: any
   setId: any
 }) {
+  const t = useTranslations('Index')
   const { data: session } = useSession()
   const { SignInModal, setShowSignInModal } = useSignInModal()
 
@@ -57,7 +59,7 @@ export default function SaveButton({
         ) : (
           <Bookmark className='h-4 w-4 text-gray-600' />
         )}
-        <p>Save</p>
+        <p>{t('saveBtnText')}</p>
       </button>
     </>
   )

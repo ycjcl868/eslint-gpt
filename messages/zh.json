@@ -31,6 +31,7 @@
     "ruleExamples": "规则示例分享",
     "saveSuccessToast": "保存成功",
     "saveFailToast": "保存失败，请重试",
+    "saveBtnText": "保存",
     "setPrivateSuccessToast": "设置成功"
   }
 }
