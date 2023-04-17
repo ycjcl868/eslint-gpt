@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from 'react'
 import { nFormatter } from '@/utils/index'
 import SaveButton from '@/components/SaveButton'
 import EditButton from '@/components/EditButton'
+import { useTranslations } from 'next-intl'
 
 export default function Banner({
   detail,
@@ -18,6 +19,7 @@ export default function Banner({
   onEdit: any
 }) {
   const router = useRouter()
+  const t = useTranslations('Index')
   const { data: session } = useSession()
   const copyRef = useRef<HTMLButtonElement | null>(null)
   const [copied, setCopied] = useState(false)
@@ -70,7 +72,9 @@ export default function Banner({
           ) : (
             <LinkIcon className='h-4 w-4 text-gray-600' />
           )}
-          <p className='text-center text-gray-600 text-sm'>Copy</p>
+          <p className='text-center text-gray-600 text-sm'>
+            {t('copyBtnText')}
+          </p>
         </button>
       )}
       {detail && (

@@ -33,6 +33,7 @@
     "saveFailToast": "保存失败，请重试",
     "saveBtnText": "保存",
     "editBtnText": "编辑",
+    "copyBtnText": "复制",
     "previewBtnText": "预览",
     "editSuccessToast": "编辑成功",
     "editFailToast": "编辑失败",
