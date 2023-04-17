@@ -73,6 +73,9 @@ const Home: NextPage<{ detail: any }> = (props) => {
 
   const generateChat = async (e: any) => {
     e.preventDefault()
+    if (!session?.user) {
+      return setShowSignInModal(true)
+    }
 
     if (!chat) {
       return
@@ -162,7 +165,6 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const disabled = !chat
   // @ts-ignore
   const isOwner = detail?.id && detail?.creatorId === session?.user?.id
-  console.log('isOwner', isOwner)
 
   const handleSave = async () => {
     const response = await fetchWithTimeout('/api/rules', {
@@ -192,6 +194,38 @@ const Home: NextPage<{ detail: any }> = (props) => {
       return
     }
     toast.success(t('saveSuccessToast'))
+
+    return data
+  }
+
+  const handleEdit = async () => {
+    const response = await fetchWithTimeout(`/api/rules/${detail.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: REQUEST_TIMEOUT,
+      body: JSON.stringify({
+        description: chat,
+        correct: good,
+        incorrect: bad,
+        result: generatedChat,
+        locale
+      })
+    })
+
+    const data = await response.json()
+    if (response.status !== 200) {
+      const errMsg = data?.message || `ERROR: ${response.statusText}`
+      toast.error(errMsg)
+      throw new Error(errMsg)
+    }
+
+    if (!data?.id) {
+      toast.error(t('editFailToast'))
+      return
+    }
+    toast.success(t('editSuccessToast'))
 
     return data
   }
@@ -393,7 +427,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
           />
         </main>
         {generatedChat && !loading ? (
-          <Banner detail={detail} onSave={handleSave} />
+          <Banner detail={detail} onSave={handleSave} onEdit={handleEdit} />
         ) : (
           <Footer />
         )}

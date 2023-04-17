@@ -21,11 +21,12 @@ export default async function handler(
       res.status(401).json({ message: 'You must be logged in.' })
       return
     }
+    const creatorId = session.user.id || ''
     const rule = await prisma.eslintRule.findFirst({
       where: {
         id: eslintRuleId,
         // @ts-ignore
-        creatorId: session.user.id || ''
+        creatorId
       }
     })
 
@@ -41,7 +42,10 @@ export default async function handler(
       where: {
         id: rule.id
       },
-      data: req.body
+      data: {
+        ...req.body,
+        creatorId
+      }
     })
     console.log('response', response)
     res.status(200).json(response)

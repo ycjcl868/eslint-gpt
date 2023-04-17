@@ -32,6 +32,9 @@
     "saveSuccessToast": "保存成功",
     "saveFailToast": "保存失败，请重试",
     "saveBtnText": "保存",
+    "editBtnText": "编辑",
+    "editSuccessToast": "编辑成功",
+    "editFailToast": "编辑失败",
     "setPrivateSuccessToast": "设置成功"
   }
 }

@@ -1,19 +1,24 @@
 import { Link as LinkIcon, Check, Eye } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { toast } from 'react-hot-toast'
 import { useEffect, useState, useRef } from 'react'
 import { nFormatter } from '@/utils/index'
 import SaveButton from '@/components/SaveButton'
+import EditButton from '@/components/EditButton'
 
 export default function Banner({
   detail,
-  onSave
+  onSave,
+  onEdit
 }: {
   detail: any
   onSave: any
+  onEdit: any
 }) {
   const router = useRouter()
+  const { data: session } = useSession()
   const copyRef = useRef<HTMLButtonElement | null>(null)
   const [copied, setCopied] = useState(false)
   const [id, setId] = useState(router?.query?.id)
@@ -21,6 +26,9 @@ export default function Banner({
   useEffect(() => {
     copyRef?.current?.focus()
   }, [])
+
+  // @ts-ignore
+  const isOwner = detail?.creatorId === session?.user?.id
 
   return (
     <div className='z-10 fixed bottom-5 inset-x-0 mx-auto max-w-fit rounded-lg px-3 py-2 bg-white border border-gray-100 shadow-md flex justify-between space-x-2 items-center'>
@@ -42,6 +50,7 @@ export default function Banner({
       </div>
       <div className='border-l border-gray-200 h-12 w-1' />
       {!detail && <SaveButton onSave={onSave} setId={setId} />}
+      {isOwner && <EditButton onEdit={onEdit} />}
       {id && (
         <button
           ref={copyRef}
