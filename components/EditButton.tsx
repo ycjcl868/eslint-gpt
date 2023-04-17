@@ -43,7 +43,7 @@ export default function EditButton({ onEdit }: { onEdit: any }) {
         ) : (
           <Edit className='h-4 w-4 text-gray-600' />
         )}
-        <p>{t('editBtnText')}</p>
+        <p className='text-center text-gray-600 text-sm'>{t('editBtnText')}</p>
       </button>
     </>
   )
