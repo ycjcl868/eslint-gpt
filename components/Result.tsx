@@ -43,26 +43,25 @@ const Result: React.FC<ResultProps> = ({
                   onChange(e.target?.textContent! || '')
                 }}
                 dangerouslySetInnerHTML={{
-                  __html:
-                    loading && isOwner
-                      ? value.toString()
-                      : marked(value.toString(), {
-                          gfm: false,
-                          breaks: false,
-                          smartypants: false,
-                          highlight: (code, lang) => {
-                            const realLang = lang || 'javascript'
-                            if (prism.languages[realLang]) {
-                              return prism.highlight(
-                                code,
-                                prism.languages[realLang],
-                                realLang
-                              )
-                            } else {
-                              return code
-                            }
+                  __html: loading
+                    ? value.toString()
+                    : marked(value.toString(), {
+                        gfm: false,
+                        breaks: false,
+                        smartypants: false,
+                        highlight: (code, lang) => {
+                          const realLang = lang || 'javascript'
+                          if (prism.languages[realLang]) {
+                            return prism.highlight(
+                              code,
+                              prism.languages[realLang],
+                              realLang
+                            )
+                          } else {
+                            return code
                           }
-                        })
+                        }
+                      })
                 }}
               />
             </div>
