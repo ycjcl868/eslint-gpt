@@ -34,6 +34,7 @@
     "saveFailToast": "Save failed, please try again",
     "saveBtnText": "Save",
     "editBtnText": "Edit",
+    "previewBtnText": "Preview",
     "editSuccessToast": "Edit success",
     "editFailToast": "Edit failed, please try again",
     "setPrivateSuccessToast": "Set success"
