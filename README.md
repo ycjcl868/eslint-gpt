@@ -1,6 +1,5 @@
 # ESLint GPT 🤖
 
-
 ![](https://user-images.githubusercontent.com/13595509/228750807-aa1e7e2b-e777-4136-96a1-969b4f5bb90f.png)
 
 ESLint GPT is an innovative project that combines the power of OpenAI's GPT model and Vercel's Edge Functions to generate custom ESLint rules. This project aims to simplify the process of creating and maintaining ESLint rules for developers.
