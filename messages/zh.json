@@ -37,6 +37,7 @@
     "previewBtnText": "预览",
     "editSuccessToast": "编辑成功",
     "editFailToast": "编辑失败",
-    "setPrivateSuccessToast": "设置成功"
+    "setPrivateSuccessToast": "设置成功",
+    "browseRule": "探索规则"
   }
 }

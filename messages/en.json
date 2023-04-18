@@ -38,6 +38,7 @@
     "previewBtnText": "Preview",
     "editSuccessToast": "Edit success",
     "editFailToast": "Edit failed, please try again",
-    "setPrivateSuccessToast": "Set success"
+    "setPrivateSuccessToast": "Set success",
+    "browseRule": "Explore Rules"
   }
 }

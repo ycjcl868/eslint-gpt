@@ -42,10 +42,11 @@ export const getAllRules = async ({
   })
 }
 
-export const getRule = async ({ where, select }: Condition = {}) => {
+export const getRule = async ({ where, select, include }: Condition = {}) => {
   const rule = await prisma.eslintRule.findUnique({
     ...(where && { where }),
-    ...(select && { select })
+    ...(select && { select }),
+    ...(include && { include })
   })
   return {
     ...rule,

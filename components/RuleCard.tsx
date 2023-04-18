@@ -11,7 +11,6 @@ import { useTranslations } from 'next-intl'
 export default function RuleCard({ data, showPrivate, initalChecked }: any) {
   const t = useTranslations('Index')
   let { id, description, creator, views, createdAt } = data
-  const avatar = 'https://avatar.vercel.sh/${id};'
 
   const [checked, setChecked] = useState(initalChecked)
   const [loading, setLoading] = useState(false)
@@ -70,9 +69,7 @@ export default function RuleCard({ data, showPrivate, initalChecked }: any) {
                 width='20'
                 height='20'
                 alt='Avatar'
-                src={
-                  creator?.image || avatar || `https://avatar.vercel.sh/${id}`
-                }
+                src={creator?.image || `https://avatar.vercel.sh/${id}`}
                 className='rounded-full'
               />
               <Link href={`/r/${id}`}>

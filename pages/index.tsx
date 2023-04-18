@@ -258,8 +258,8 @@ const Home: NextPage<{ detail: any }> = (props) => {
         <main
           className={`flex flex-1 w-full flex-col items-center justify-center px-4 mt-6`}
         >
-          {!detail?.id && (
-            <div className='flex items-center justify-center mb-5'>
+          <div className='flex items-center justify-center mb-5'>
+            {!detail?.id && (
               <Link
                 className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mr-3'
                 href='https://github.com/ycjcl868/eslint-gpt'
@@ -269,17 +269,17 @@ const Home: NextPage<{ detail: any }> = (props) => {
                 <Github />
                 <p>Star on GitHub</p>
               </Link>
-              <TwitterShareButton
-                url={'https://eslint.rustc.cloud/'}
-                hashtags={['chatgpt', 'eslint', 'github']}
-              >
-                <TwitterIcon
-                  className='fill-[#00aced] opacity-100 hover:opacity-80 transition-opacity'
-                  size={32}
-                />
-              </TwitterShareButton>
-            </div>
-          )}
+            )}
+            <TwitterShareButton
+              url={`https://eslint.rustc.cloud${router.asPath}`}
+              hashtags={['chatgpt', 'eslint', 'github']}
+            >
+              <TwitterIcon
+                className='fill-[#00aced] opacity-100 hover:opacity-80 transition-opacity'
+                size={32}
+              />
+            </TwitterShareButton>
+          </div>
           {!detail?.id ? (
             <h1 className='sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900'>
               <div className='px-4 py-2 sm:mt-3 mt-8 w-full' />
@@ -287,7 +287,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
             </h1>
           ) : (
             <h2 className='text-3xl sm:text-4xl font-semibold font-display mb-5'>
-              Browse Rule
+              {t('browseRule')}
             </h2>
           )}
           {useNotice && <p className='text-slate-500 mt-5'>{t('notice')}</p>}

@@ -11,6 +11,9 @@ export async function getServerSideProps({
   const detail = await getRule({
     where: {
       id
+    },
+    include: {
+      creator: true
     }
   })
 
