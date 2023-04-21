@@ -39,6 +39,7 @@
     "editSuccessToast": "Edit success",
     "editFailToast": "Edit failed, please try again",
     "setPrivateSuccessToast": "Set success",
-    "browseRule": "Rule Detail"
+    "browseRule": "Rule Detail",
+    "logout": "Log Out"
   }
 }
