@@ -45,7 +45,7 @@ export default function UserDropdown() {
               onClick={() => signOut()}
             >
               <LogOut className='h-4 w-4' />
-              <p className='text-sm'>Logout</p>
+              <p className='text-sm'>{t('logout')}</p>
             </button>
           </div>
         }
