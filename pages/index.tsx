@@ -21,7 +21,6 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useSignInModal } from '@/hooks/useSignInModal'
 import { useSession } from 'next-auth/react'
-import { useLocalStorageState } from 'ahooks'
 
 const Result = dynamic(() => import('../components/Result'), { ssr: false })
 
