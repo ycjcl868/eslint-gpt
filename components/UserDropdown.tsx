@@ -100,21 +100,15 @@ export default function UserDropdown() {
             <span className='text-gray-700'>OpenAI Model</span>
             <select
               className='block w-full border-gray-300 shadow-sm focus:border-black focus:ring-black my-2'
+              defaultValue={config?.apiModel}
               onChange={(e) =>
                 setConfig({
                   apiModel: e.target.value
                 })
               }
             >
-              <option
-                value='gpt-3.5-turbo'
-                selected={config?.apiModel === 'gpt-3.5-turbo'}
-              >
-                gpt-3.5-turbo
-              </option>
-              <option value='gpt-4' selected={config?.apiModel === 'gpt-4'}>
-                gpt-4
-              </option>
+              <option value='gpt-3.5-turbo'>gpt-3.5-turbo</option>
+              <option value='gpt-4'>gpt-4</option>
             </select>
           </label>
           <label className='block'>

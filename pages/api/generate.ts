@@ -1,6 +1,7 @@
 import { createTranslator } from 'next-intl'
 import {
   OpenAIStream,
+  checkString,
   ChatGPTCompletionRequest,
   isNewModel
 } from '../../utils/OpenAIStream'
@@ -47,21 +48,38 @@ const handler = async (req: Request): Promise<Response> => {
       sign
     ))
   ) {
-    return new Response('Invalid signature', { status: 400 })
+    const statusText = 'Invalid signature'
+    return new Response(statusText, { status: 400, statusText })
   }
 
   if (!description) {
-    return new Response('No description in the request', { status: 400 })
+    const statusText = 'No description in the request'
+    return new Response(statusText, { status: 400, statusText })
   }
 
   if (!locale) {
-    return new Response('No locale in the request', { status: 400 })
+    const statusText = 'No locale in the request'
+    return new Response(statusText, { status: 400, statusText })
   }
+
+  if (userModel === 'gpt-4' && !userApiKey) {
+    const statusText = 'OpenAI API Key not support gpt-4 model'
+    return new Response(statusText, { status: 400, statusText })
+  }
+
   let messages = {}
   try {
     messages = (await import(`../../messages/${locale}.json`)).default
   } catch (e) {
-    return new Response('No locale in the request', { status: 400 })
+    const statusText = 'No locale in the request'
+    return new Response(statusText, { status: 400, statusText })
+  }
+
+  const keys = userApiKey || process.env.OPENAI_API_KEY || ''
+  const [apiKey] = keys.split(',').sort(() => Math.random() - 0.5)
+  if (!checkString(apiKey)) {
+    const statusText = 'OpenAI API Key Format Error'
+    return new Response(statusText, { status: 400, statusText })
   }
 
   const t = createTranslator({
@@ -86,7 +104,6 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   const payload: ChatGPTCompletionRequest = {
-    userApiKey: userApiKey?.startsWith('sk-') ? userApiKey : '',
     model: userModel,
     temperature: 0.6,
     top_p: 1,
@@ -104,7 +121,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { status, stream, statusText } = await OpenAIStream(payload)
+    const { status, stream, statusText } = await OpenAIStream(apiKey, payload)
 
     if (status !== 200) {
       return new Response(statusText, { status, statusText })

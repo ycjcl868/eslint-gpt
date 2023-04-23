@@ -12,35 +12,27 @@ export interface ChatGPTMessage {
   content: string
 }
 
+export function checkString(str: string) {
+  var pattern = /^sk-[A-Za-z0-9]{48}$/
+  return pattern.test(str)
+}
+
 export interface ChatGPTCompletionRequest extends CreateCompletionRequest {
   messages?: ChatGPTMessage[]
-  userApiKey?: string
 }
 
 export const isNewModel = (model: string) =>
   ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301', 'gpt-4'].includes(model)
 
-export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
+export async function OpenAIStream(
+  apiKey: string,
+  payload: ChatGPTCompletionRequest
+) {
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
-  const { userApiKey, ...restPayload } = payload
-  var keys = userApiKey || process.env.OPENAI_API_KEY || ''
 
   let counter = 0
 
-  const [openai_api_key] = keys.split(',').sort(() => Math.random() - 0.5)
-
-  function checkString(str: string) {
-    var pattern = /^sk-[A-Za-z0-9]{48}$/
-    return pattern.test(str)
-  }
-  if (!checkString(openai_api_key)) {
-    throw new Error('OpenAI API Key Format Error')
-  }
-  if (payload.model === 'gpt-4' && !userApiKey) {
-    throw new Error('OpenAI API Key not support gpt-4 model')
-  }
-  console.log('restPayload', restPayload)
   console.log('model', payload.model, isNewModel(payload.model))
 
   const res = await fetch(
@@ -49,10 +41,10 @@ export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${openai_api_key ?? ''}`
+        Authorization: `Bearer ${apiKey ?? ''}`
       },
       method: 'POST',
-      body: JSON.stringify(restPayload)
+      body: JSON.stringify(payload)
     }
   )
 

@@ -43,13 +43,6 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const detail = id && props.detail ? props.detail : null
 
   const [loading, setLoading] = useState(false)
-  const [settings] = useLocalStorageState<{
-    apiKey?: string
-    apiModel?: string
-  }>(
-    // @ts-ignore
-    session?.user?.id
-  )
   const [chat, setChat] = useState(detail?.description || t('placeholder'))
   const [good, setGood] = useState(detail?.correct || GOOD_PLACEHOLDER)
   const [bad, setBad] = useState(detail?.incorrect || BAD_PLACEHOLDER)
@@ -82,6 +75,15 @@ const Home: NextPage<{ detail: any }> = (props) => {
     if (!session?.user) {
       return setShowSignInModal(true)
     }
+
+    // @ts-ignore
+    let settings
+    try {
+      settings = JSON.parse(
+        // @ts-ignore
+        window.localStorage.getItem(session?.user?.id) || '{}'
+      )
+    } catch (e) {}
 
     if (!chat) {
       return
