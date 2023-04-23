@@ -23,13 +23,12 @@ export const isNewModel = (model: string) =>
 export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
-  var keys = payload?.userApiKey || process.env.OPENAI_API_KEY || ''
+  const { userApiKey, ...restPayload } = payload
+  var keys = userApiKey || process.env.OPENAI_API_KEY || ''
 
   let counter = 0
 
   const [openai_api_key] = keys.split(',').sort(() => Math.random() - 0.5)
-  console.log('prompt', payload.prompt)
-  console.log('message', payload.messages)
 
   function checkString(str: string) {
     var pattern = /^sk-[A-Za-z0-9]{48}$/
@@ -38,6 +37,11 @@ export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
   if (!checkString(openai_api_key)) {
     throw new Error('OpenAI API Key Format Error')
   }
+  if (payload.model === 'gpt-4' && !userApiKey) {
+    throw new Error('OpenAI API Key not support gpt-4 model')
+  }
+  console.log('restPayload', restPayload)
+  console.log('model', payload.model, isNewModel(payload.model))
 
   const res = await fetch(
     `${process.env.OPENAI_HOST || 'https://api.openai.com'}/v1` +
@@ -48,7 +52,7 @@ export async function OpenAIStream(payload: ChatGPTCompletionRequest) {
         Authorization: `Bearer ${openai_api_key ?? ''}`
       },
       method: 'POST',
-      body: JSON.stringify(payload)
+      body: JSON.stringify(restPayload)
     }
   )
 
