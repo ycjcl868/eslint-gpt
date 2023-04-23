@@ -12,6 +12,10 @@ ESLint GPT is a project that uses OpenAI's GPT model to generate custom ESLint r
 
 ![](https://user-images.githubusercontent.com/13595509/231453712-0ed9df97-05b2-469c-8c06-458ab47f4b4a.png)
 
+### Custom OpenAI Config
+
+![](https://user-images.githubusercontent.com/13595509/233825257-24ef5470-3434-4a80-9144-d9d86f090c9c.gif)
+
 ### Save Rule
 
 ![](https://user-images.githubusercontent.com/13595509/231453228-247ac0aa-5057-4ad0-aea7-c8848f2f9ade.png)
