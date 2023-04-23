@@ -22,7 +22,10 @@ export default function UserDropdown() {
   const { setVisible, bindings } = useModal()
   // @ts-ignore
   const [settings, setSettings] = useLocalStorageState(session?.user?.id)
-  const [config, setConfig] = useSetState<{ apiKey?: string }>({})
+  const [config, setConfig] = useSetState<{
+    apiKey?: string
+    apiModel?: string
+  }>({})
 
   const t = useTranslations('Index')
   const router = useRouter()
@@ -36,6 +39,8 @@ export default function UserDropdown() {
   if (!email && !name) return null
 
   const displayName = email || name || ''
+
+  console.log('config', config)
 
   return (
     <motion.div
@@ -91,11 +96,27 @@ export default function UserDropdown() {
           OpenAI official API, more stable, charge by usage
         </Modal.Subtitle> */}
         <Modal.Content>
-          {/* <Input
-            label='API Key'
-            placeholder='sk-******'
-            className='focus:ring-0 focus:outline-none'
-          /> */}
+          <label className='block mb-6'>
+            <span className='text-gray-700'>OpenAI Model</span>
+            <select
+              className='block w-full border-gray-300 shadow-sm focus:border-black focus:ring-black my-2'
+              onChange={(e) =>
+                setConfig({
+                  apiModel: e.target.value
+                })
+              }
+            >
+              <option
+                value='gpt-3.5-turbo'
+                selected={config?.apiModel === 'gpt-3.5-turbo'}
+              >
+                gpt-3.5-turbo
+              </option>
+              <option value='gpt-4' selected={config?.apiModel === 'gpt-4'}>
+                gpt-4
+              </option>
+            </select>
+          </label>
           <label className='block'>
             <span className='text-gray-700'>OpenAI ApiKey</span>
             <input
@@ -109,10 +130,12 @@ export default function UserDropdown() {
               }
               placeholder='sk-******'
             />
+          </label>
+          <div className='my-2'>
             <Dot type='warning'>
               <Text small>{t('settingsOpenAIKeyTip')}</Text>
             </Dot>
-          </label>
+          </div>
         </Modal.Content>
         <Modal.Action passive onClick={() => setVisible(false)}>
           <span className='text-base'>{t('cancelBtnText')}</span>

@@ -2,7 +2,7 @@ import { createTranslator } from 'next-intl'
 import {
   OpenAIStream,
   ChatGPTCompletionRequest,
-  isTurboModel
+  isNewModel
 } from '../../utils/OpenAIStream'
 import { verifySignature } from '../../utils/auth'
 
@@ -18,18 +18,29 @@ export const config = {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  const { description, good, bad, locale, time, sign, userApiKey } =
-    (await req.json()) as {
-      description: string
-      good?: string
-      bad?: string
-      locale: 'zh' | 'en'
-      time: number
-      sign: string
-      userApiKey?: string
-    }
+  const {
+    description,
+    good,
+    bad,
+    locale,
+    time,
+    sign,
+    userApiKey,
+    userModel: _userModel
+  } = (await req.json()) as {
+    description: string
+    good?: string
+    bad?: string
+    locale: 'zh' | 'en'
+    time: number
+    sign: string
+    userApiKey?: string
+    userModel?: string
+  }
 
-  if (!process.env.OPENAI_MODEL) {
+  const userModel = _userModel || process.env.OPENAI_MODEL
+
+  if (!userModel) {
     throw new Error('Missing env var OPENAI_MODEL from OpenAI')
   }
 
@@ -82,7 +93,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   const payload: ChatGPTCompletionRequest = {
     userApiKey: userApiKey?.startsWith('sk-') ? userApiKey : '',
-    model: process.env.OPENAI_MODEL,
+    model: userModel,
     temperature: 0.6,
     top_p: 1,
     frequency_penalty: 0,
@@ -92,7 +103,7 @@ const handler = async (req: Request): Promise<Response> => {
     n: 1
   }
 
-  if (isTurboModel(payload.model)) {
+  if (isNewModel(payload.model)) {
     payload.messages = [{ role: 'user', content: prompt }]
   } else {
     payload.prompt = prompt

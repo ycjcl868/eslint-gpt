@@ -44,7 +44,10 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const detail = id && props.detail ? props.detail : null
 
   const [loading, setLoading] = useState(false)
-  const [settings] = useLocalStorageState<{ apiKey?: string }>(
+  const [settings] = useLocalStorageState<{
+    apiKey?: string
+    apiModel?: string
+  }>(
     // @ts-ignore
     session?.user?.id
   )
@@ -105,6 +108,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
               api_key,
               locale,
               time: timestamp,
+              userModel: settings?.apiModel,
               userApiKey: settings?.apiKey,
               sign: await generateSignature({
                 t: timestamp,
@@ -123,6 +127,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
               good,
               bad,
               locale,
+              userModel: settings?.apiModel,
               userApiKey: settings?.apiKey,
               time: timestamp,
               sign: await generateSignature({
