@@ -40,6 +40,11 @@
     "editFailToast": "Edit failed, please try again",
     "setPrivateSuccessToast": "Set success",
     "browseRule": "Rule Detail",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "settings": "Settings",
+    "cancelBtnText": "Cancel",
+    "submitBtnText": "Submit",
+    "submitSuccessText": "Submit success",
+    "settingsOpenAIKeyTip": "Configuration data will only exist in the browser, please feel free to use it!"
   }
 }

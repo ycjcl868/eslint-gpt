@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { signOut, useSession } from 'next-auth/react'
-import { LogOut, Ruler } from 'lucide-react'
+import { useLocalStorageState, useSetState } from 'ahooks'
+import { LogOut, Ruler, Settings } from 'lucide-react'
 import Popover from './Popover'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
 import { useTranslations } from 'next-intl'
+import { Dot, Modal, Text, useModal } from '@geist-ui/core'
+import { toast } from 'react-hot-toast'
 
 const FADE_IN_ANIMATION_SETTINGS = {
   initial: { opacity: 0 },
@@ -16,10 +19,19 @@ const FADE_IN_ANIMATION_SETTINGS = {
 
 export default function UserDropdown() {
   const { data: session } = useSession()
+  const { setVisible, bindings } = useModal()
+  // @ts-ignore
+  const [settings, setSettings] = useLocalStorageState(session?.user?.id)
+  const [config, setConfig] = useSetState<{ apiKey?: string }>({})
+
   const t = useTranslations('Index')
   const router = useRouter()
   const { email, image, name } = session?.user || {}
   const [openPopover, setOpenPopover] = useState(false)
+
+  useEffect(() => {
+    setConfig(settings || {})
+  }, [settings])
 
   if (!email && !name) return null
 
@@ -39,6 +51,13 @@ export default function UserDropdown() {
             >
               <Ruler className='h-4 w-4' />
               <p className='text-sm'>{t('myRules')}</p>
+            </button>
+            <button
+              className='flex items-center justify-start space-x-2 relative w-full rounded-md p-2 text-left text-sm transition-all duration-75 hover:bg-gray-100'
+              onClick={() => setVisible(true)}
+            >
+              <Settings className='h-4 w-4' />
+              <p className='text-sm'>{t('settings')}</p>
             </button>
             <button
               className='flex items-center justify-start space-x-2 relative w-full rounded-md p-2 text-left text-sm transition-all duration-75 hover:bg-gray-100'
@@ -65,6 +84,49 @@ export default function UserDropdown() {
           />
         </button>
       </Popover>
+
+      <Modal {...bindings}>
+        <Modal.Title>{t('settings')}</Modal.Title>
+        {/* <Modal.Subtitle>
+          OpenAI official API, more stable, charge by usage
+        </Modal.Subtitle> */}
+        <Modal.Content>
+          {/* <Input
+            label='API Key'
+            placeholder='sk-******'
+            className='focus:ring-0 focus:outline-none'
+          /> */}
+          <label className='block'>
+            <span className='text-gray-700'>OpenAI ApiKey</span>
+            <input
+              type='text'
+              className='w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-2'
+              value={config?.apiKey}
+              onChange={(e) =>
+                setConfig({
+                  apiKey: e.target.value
+                })
+              }
+              placeholder='sk-******'
+            />
+            <Dot type='warning'>
+              <Text small>{t('settingsOpenAIKeyTip')}</Text>
+            </Dot>
+          </label>
+        </Modal.Content>
+        <Modal.Action passive onClick={() => setVisible(false)}>
+          <span className='text-base'>{t('cancelBtnText')}</span>
+        </Modal.Action>
+        <Modal.Action
+          onClick={() => {
+            setSettings(config)
+            toast.success(t('submitSuccessText'))
+            setVisible(false)
+          }}
+        >
+          <span className='text-base'>{t('submitBtnText')}</span>
+        </Modal.Action>
+      </Modal>
     </motion.div>
   )
 }

@@ -18,14 +18,16 @@ export const config = {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  const { description, good, bad, locale, time, sign } = (await req.json()) as {
-    description: string
-    good?: string
-    bad?: string
-    locale: 'zh' | 'en'
-    time: number
-    sign: string
-  }
+  const { description, good, bad, locale, time, sign, userApiKey } =
+    (await req.json()) as {
+      description: string
+      good?: string
+      bad?: string
+      locale: 'zh' | 'en'
+      time: number
+      sign: string
+      userApiKey?: string
+    }
 
   if (!process.env.OPENAI_MODEL) {
     throw new Error('Missing env var OPENAI_MODEL from OpenAI')
@@ -79,6 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   const payload: ChatGPTCompletionRequest = {
+    userApiKey: userApiKey?.startsWith('sk-') ? userApiKey : '',
     model: process.env.OPENAI_MODEL,
     temperature: 0.6,
     top_p: 1,
@@ -95,15 +98,18 @@ const handler = async (req: Request): Promise<Response> => {
     payload.prompt = prompt
   }
 
-  console.log('payload', payload)
+  try {
+    const { status, stream, statusText } = await OpenAIStream(payload)
 
-  const { status, stream, statusText } = await OpenAIStream(payload)
+    if (status !== 200) {
+      return new Response(statusText, { status, statusText })
+    }
 
-  if (status !== 200) {
-    return new Response(statusText, { status })
+    return new Response(stream)
+  } catch (e: any) {
+    const errMsg = e?.message || 'OpenAI Service Error'
+    return new Response(errMsg, { status: 500, statusText: errMsg })
   }
-
-  return new Response(stream)
 }
 
 export default handler

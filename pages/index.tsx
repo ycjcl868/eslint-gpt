@@ -21,6 +21,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useSignInModal } from '@/hooks/useSignInModal'
 import { useSession } from 'next-auth/react'
+import { useLocalStorageState } from 'ahooks'
 
 const Result = dynamic(() => import('../components/Result'), { ssr: false })
 
@@ -43,6 +44,10 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const detail = id && props.detail ? props.detail : null
 
   const [loading, setLoading] = useState(false)
+  const [settings] = useLocalStorageState<{ apiKey?: string }>(
+    // @ts-ignore
+    session?.user?.id
+  )
   const [chat, setChat] = useState(detail?.description || t('placeholder'))
   const [good, setGood] = useState(detail?.correct || GOOD_PLACEHOLDER)
   const [bad, setBad] = useState(detail?.incorrect || BAD_PLACEHOLDER)
@@ -100,6 +105,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
               api_key,
               locale,
               time: timestamp,
+              userApiKey: settings?.apiKey,
               sign: await generateSignature({
                 t: timestamp,
                 m: chat || ''
@@ -117,6 +123,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
               good,
               bad,
               locale,
+              userApiKey: settings?.apiKey,
               time: timestamp,
               sign: await generateSignature({
                 t: timestamp,
@@ -137,6 +144,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
     console.log('Edge function returned.')
 
     if (!response.ok) {
+      console.log('response', response.body)
       toast.error('ERROR: ' + response.statusText)
       setLoading(false)
       throw new Error(response.statusText)

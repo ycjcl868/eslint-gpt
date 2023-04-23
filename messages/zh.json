@@ -39,6 +39,11 @@
     "editFailToast": "编辑失败",
     "setPrivateSuccessToast": "设置成功",
     "browseRule": "规则详情",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "settings": "设置",
+    "cancelBtnText": "取消",
+    "submitBtnText": "提交",
+    "submitSuccessText": "提交成功",
+    "settingsOpenAIKeyTip": "配置数据只会存在浏览器中，请放心使用！"
   }
 }

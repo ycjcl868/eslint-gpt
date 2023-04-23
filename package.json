@@ -24,6 +24,7 @@
     "@upstash/ratelimit": "^0.4.1",
     "@upstash/redis": "^1.20.3",
     "@vercel/analytics": "^0.1.11",
+    "ahooks": "^3.7.6",
     "dotenv": "^16.0.3",
     "eventsource-parser": "^0.0.5",
     "focus-trap-react": "^10.1.1",
