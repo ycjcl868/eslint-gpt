@@ -6,12 +6,6 @@ import {
 } from '../../utils/OpenAIStream'
 import { verifySignature } from '../../utils/auth'
 
-if (process.env.NEXT_PUBLIC_USE_USER_KEY !== 'true') {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error('Missing env var from OpenAI')
-  }
-}
-
 export const config = {
   runtime: 'edge',
   unstable_allowDynamic: ['/node_modules/js-sha256/src/sha256.js']

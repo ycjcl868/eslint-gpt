@@ -25,7 +25,6 @@ import { useLocalStorageState } from 'ahooks'
 
 const Result = dynamic(() => import('../components/Result'), { ssr: false })
 
-const useUserKey = process.env.NEXT_PUBLIC_USE_USER_KEY === 'true'
 const useNotice = process.env.NEXT_NOTICE === 'true'
 
 const REQUEST_TIMEOUT = 15 * 1000
@@ -54,7 +53,6 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const [chat, setChat] = useState(detail?.description || t('placeholder'))
   const [good, setGood] = useState(detail?.correct || GOOD_PLACEHOLDER)
   const [bad, setBad] = useState(detail?.incorrect || BAD_PLACEHOLDER)
-  const [api_key, setAPIKey] = useState('')
 
   const [generatedChat, setGeneratedChat] = useState<String>(
     detail?.result || ''
@@ -94,48 +92,26 @@ const Home: NextPage<{ detail: any }> = (props) => {
     let response
     const timestamp = Date.now()
     try {
-      response = useUserKey
-        ? await fetchWithTimeout('/api/generate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            timeout: REQUEST_TIMEOUT,
-            body: JSON.stringify({
-              description: chat,
-              good,
-              bad,
-              api_key,
-              locale,
-              time: timestamp,
-              userModel: settings?.apiModel,
-              userApiKey: settings?.apiKey,
-              sign: await generateSignature({
-                t: timestamp,
-                m: chat || ''
-              })
-            })
+      response = await fetchWithTimeout('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: REQUEST_TIMEOUT,
+        body: JSON.stringify({
+          description: chat,
+          good,
+          bad,
+          locale,
+          userModel: settings?.apiModel,
+          userApiKey: settings?.apiKey,
+          time: timestamp,
+          sign: await generateSignature({
+            t: timestamp,
+            m: chat || ''
           })
-        : await fetchWithTimeout('/api/generate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            timeout: REQUEST_TIMEOUT,
-            body: JSON.stringify({
-              description: chat,
-              good,
-              bad,
-              locale,
-              userModel: settings?.apiModel,
-              userApiKey: settings?.apiKey,
-              time: timestamp,
-              sign: await generateSignature({
-                t: timestamp,
-                m: chat || ''
-              })
-            })
-          })
+        })
+      })
     } catch (e: unknown) {
       console.error('[fetch ERROR]', e)
       if (e instanceof Error && e?.name === 'AbortError') {
@@ -303,17 +279,6 @@ const Home: NextPage<{ detail: any }> = (props) => {
           )}
           {useNotice && <p className='text-slate-500 mt-5'>{t('notice')}</p>}
           <div className='max-w-xl w-full'>
-            {useUserKey && (
-              <>
-                <input
-                  value={api_key}
-                  onChange={(e) => setAPIKey(e.target.value)}
-                  className='w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-black focus:ring-black p-2'
-                  placeholder={t('openaiApiKeyPlaceholder')}
-                />
-              </>
-            )}
-
             <div>
               <div
                 className={`flex ${
