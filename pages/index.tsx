@@ -21,6 +21,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useSignInModal } from '@/hooks/useSignInModal'
 import { useSession } from 'next-auth/react'
+import { useLocalStorageState } from 'ahooks'
 
 const Result = dynamic(() => import('../components/Result'), { ssr: false })
 
@@ -40,6 +41,11 @@ const Home: NextPage<{ detail: any }> = (props) => {
   const { id } = router.query
 
   const detail = id && props.detail ? props.detail : null
+  const [draft, setDraft] = useLocalStorageState<{
+    description?: string
+    correct?: string
+    incorrect?: string
+  }>('eslint_gpt_draft')
 
   const [loading, setLoading] = useState(false)
   const [chat, setChat] = useState(detail?.description || t('placeholder'))
@@ -62,12 +68,14 @@ const Home: NextPage<{ detail: any }> = (props) => {
 
   useEffect(() => {
     if (!id) {
-      setChat(t('placeholder'))
-      setGood(GOOD_PLACEHOLDER)
-      setBad(BAD_PLACEHOLDER)
+      setChat(draft?.description || t('placeholder'))
+      setGood(draft?.correct || GOOD_PLACEHOLDER)
+      setBad(draft?.incorrect || BAD_PLACEHOLDER)
       setGeneratedChat('')
     }
   }, [id])
+
+  console.log('draft', draft)
 
   const generateChat = async (e: any) => {
     e.preventDefault()
@@ -184,6 +192,7 @@ const Home: NextPage<{ detail: any }> = (props) => {
       return
     }
     toast.success(t('saveSuccessToast'))
+    setDraft({}) // clear localStorage
 
     return data
   }
@@ -299,6 +308,12 @@ const Home: NextPage<{ detail: any }> = (props) => {
               <textarea
                 value={chat}
                 onChange={(e) => setChat(e.target.value)}
+                onBlur={() => {
+                  setDraft((prev) => ({
+                    ...prev,
+                    description: chat
+                  }))
+                }}
                 rows={4}
                 disabled={detail?.id ? !isOwner : false}
                 className={`w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-2 ${
@@ -329,6 +344,12 @@ const Home: NextPage<{ detail: any }> = (props) => {
                   <textarea
                     value={bad}
                     onChange={(e) => setBad(e.target.value)}
+                    onBlur={() => {
+                      setDraft((prev) => ({
+                        ...prev,
+                        incorrect: bad
+                      }))
+                    }}
                     rows={12}
                     disabled={detail?.id ? !isOwner : false}
                     className='bg-[#fff6f6] w-full rounded-md border-gray-300 shadow-sm focus:border-red-400 focus:ring-red-400 my-2'
@@ -343,6 +364,12 @@ const Home: NextPage<{ detail: any }> = (props) => {
                   <textarea
                     value={good}
                     onChange={(e) => setGood(e.target.value)}
+                    onBlur={() => {
+                      setDraft((prev) => ({
+                        ...prev,
+                        correct: good
+                      }))
+                    }}
                     disabled={detail?.id ? !isOwner : false}
                     rows={12}
                     className='bg-[#f6fff6] w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 my-2'
