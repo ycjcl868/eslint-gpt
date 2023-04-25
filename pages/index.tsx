@@ -79,6 +79,11 @@ const Home: NextPage<{ detail: any }> = (props) => {
 
   const generateChat = async (e: any) => {
     e.preventDefault()
+    setDraft({
+      description: chat,
+      incorrect: bad,
+      correct: good
+    })
     if (!session?.user) {
       return setShowSignInModal(true)
     }

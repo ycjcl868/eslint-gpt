@@ -18,6 +18,7 @@ export default function RuleCard({ data, showPrivate, initalChecked }: any) {
   const handleChecked = async (e: any) => {
     const rulePublic = e.target.checked
     setLoading(true)
+    setChecked((prev) => !prev)
     try {
       const response = await fetch(`/api/rules/${id}`, {
         method: 'POST',
@@ -35,7 +36,6 @@ export default function RuleCard({ data, showPrivate, initalChecked }: any) {
       }
       console.log('success')
       toast.success(t('setPrivateSuccessToast'))
-      setChecked((prev) => !prev)
     } catch (e) {
       setChecked(initalChecked)
     } finally {
