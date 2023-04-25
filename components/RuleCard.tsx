@@ -35,6 +35,7 @@ export default function RuleCard({ data, showPrivate, initalChecked }: any) {
       }
       console.log('success')
       toast.success(t('setPrivateSuccessToast'))
+      setChecked((prev) => !prev)
     } catch (e) {
       setChecked(initalChecked)
     } finally {
