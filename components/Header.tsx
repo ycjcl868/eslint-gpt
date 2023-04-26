@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useTranslations } from 'next-intl'
+import cls from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import UserDropdown from './UserDropdown'
+import { Button } from '@geist-ui/core'
 
 const FADE_IN_ANIMATION_SETTINGS = {
   initial: { opacity: 0 },
@@ -13,13 +15,16 @@ const FADE_IN_ANIMATION_SETTINGS = {
   transition: { duration: 0.2 }
 }
 
-const LinkTab = ({ children }) => {
+const LinkTab = ({ children, className = '' }) => {
   const { data: session } = useSession()
   return (
     <div
-      className={`relative font-medium text-black-600 before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:bg-indigo-600 before:transition hover:before:scale-x-100 ${
-        session ? 'leading-10' : 'leading-8'
-      }`}
+      className={cls(
+        `relative font-medium text-black-600 before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:bg-indigo-600 before:transition hover:before:scale-x-100 ${
+          session ? 'leading-10' : 'leading-8'
+        }`,
+        className
+      )}
     >
       {children}
     </div>
@@ -53,9 +58,11 @@ export default function Header(props) {
           <Link href='/explore'>{t('explore')}</Link>
         </LinkTab>
         {otherLocale && (
-          <LinkTab>
+          <LinkTab className='hover:before:scale-x-0'>
             <Link href={route} locale={otherLocale}>
-              {t('switchLocale', { locale: otherLocale })}
+              <Button auto scale={2 / 3} px={0.6}>
+                {t('switchLocale', { locale: otherLocale })}
+              </Button>
             </Link>
           </LinkTab>
         )}

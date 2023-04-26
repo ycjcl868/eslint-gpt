@@ -1,7 +1,7 @@
 {
   "Index": {
     "title": "ESLint 规则生成器",
-    "switchLocale": "EN",
+    "switchLocale": "En",
     "deployWiki": "部署自己的网站？",
     "description2": "帮你生成 ESLint 规则",
     "step0": "粘贴你的 OpenAI API Key",
