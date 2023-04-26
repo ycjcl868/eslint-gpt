@@ -15,15 +15,14 @@ const FADE_IN_ANIMATION_SETTINGS = {
   transition: { duration: 0.2 }
 }
 
-const LinkTab = ({ children, className = '' }) => {
+const LinkTab = ({ children, hover = true }) => {
   const { data: session } = useSession()
   return (
     <div
       className={cls(
-        `relative font-medium text-black-600 before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:bg-indigo-600 before:transition hover:before:scale-x-100 ${
-          session ? 'leading-10' : 'leading-8'
-        }`,
-        className
+        `relative font-medium text-black-600 before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:bg-indigo-600 before:transition ${
+          hover ? 'hover:before:scale-x-100' : ''
+        } ${session ? 'leading-10' : 'leading-8'}`
       )}
     >
       {children}
@@ -58,7 +57,7 @@ export default function Header(props) {
           <Link href='/explore'>{t('explore')}</Link>
         </LinkTab>
         {otherLocale && (
-          <LinkTab className='hover:before:scale-x-0'>
+          <LinkTab hover={false}>
             <Link href={route} locale={otherLocale}>
               <Button auto scale={2 / 3} px={0.6}>
                 {t('switchLocale', { locale: otherLocale })}
