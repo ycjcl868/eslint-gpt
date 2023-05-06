@@ -11,8 +11,6 @@ class MyDocument extends Document {
             sizes='192x192'
             href='/favicon.ico'
           ></link>
-          {/* <meta property='og:image' content='/og-image.png' />
-          <meta name='twitter:image' content='/og-image.png' /> */}
         </Head>
         <body>
           <Main />
