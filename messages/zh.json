@@ -27,6 +27,7 @@
     "copyToast": "README 复制到剪贴板",
     "timeout": "请求超时，请重试",
     "explore": "探索",
+    "guide": "指南",
     "myRules": "我的规则",
     "ruleExamples": "规则示例分享",
     "saveSuccessToast": "保存成功",

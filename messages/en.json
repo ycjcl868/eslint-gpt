@@ -28,6 +28,7 @@
     "copyToast": "README copied to clipboard",
     "timeout": "Request timeout, please try again",
     "explore": "Explore",
+    "guide": "Guide",
     "myRules": "My Rules",
     "ruleExamples": "Browse Examples",
     "saveSuccessToast": "Save success",

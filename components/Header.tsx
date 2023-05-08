@@ -54,6 +54,11 @@ export default function Header(props) {
 
       <div className='flex gap-6'>
         <LinkTab>
+          <Link target='_blank' href='https://www.rustc.cloud/eslint-gpt'>
+            {t('guide')}
+          </Link>
+        </LinkTab>
+        <LinkTab>
           <Link href='/explore'>{t('explore')}</Link>
         </LinkTab>
         {otherLocale && (
