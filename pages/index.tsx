@@ -63,14 +63,14 @@ const Home: NextPage<{ detail: any }> = (props) => {
 
   useView(detail?.id)
   useEffect(() => {
-    setChat(detail?.description || t('placeholder'))
+    setChat(detail?.description ?? t('placeholder'))
   }, [t('placeholder')])
 
   useEffect(() => {
     if (!id) {
-      setChat(draft?.description || t('placeholder'))
-      setGood(draft?.correct || GOOD_PLACEHOLDER)
-      setBad(draft?.incorrect || BAD_PLACEHOLDER)
+      setChat(draft?.description ?? t('placeholder'))
+      setGood(draft?.correct ?? GOOD_PLACEHOLDER)
+      setBad(draft?.incorrect ?? BAD_PLACEHOLDER)
       setGeneratedChat('')
     }
   }, [id])
