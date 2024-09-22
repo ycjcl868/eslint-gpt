@@ -17,10 +17,15 @@ export async function getServerSideProps({
     }
   })
 
+  // @ts-ignore
   if (detail?.creator) {
+    // @ts-ignore
     detail.creator?.createdAt &&
+      // @ts-ignore
       (detail.creator.createdAt = detail.creator.createdAt.toISOString())
+    // @ts-ignore
     detail.creator?.updatedAt &&
+      // @ts-ignore
       (detail.creator.updatedAt = detail.creator.updatedAt.toISOString())
   }
 
