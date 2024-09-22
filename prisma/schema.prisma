@@ -1,5 +1,5 @@
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -69,11 +69,11 @@ enum Locale {
 }
 
 model EslintRule {
-  id          String  @id
-  description String  @db.TinyText
-  correct     String? @db.MediumText
-  incorrect   String? @db.MediumText
-  result      String  @db.LongText
+  id          String  @id @default(cuid())
+  description String  @db.Text
+  correct     String? @db.Text
+  incorrect   String? @db.Text
+  result      String  @db.Text
   locale      Locale
 
   private   Boolean  @default(true)
@@ -87,5 +87,4 @@ model EslintRule {
   @@index([views(sort: Desc)])
   @@index([createdAt])
   @@index([private])
-  @@fulltext([description])
 }
