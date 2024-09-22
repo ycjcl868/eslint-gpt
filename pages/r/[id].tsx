@@ -1,5 +1,13 @@
 import { getRule } from '@/utils/api'
 import IndexPage from '../index'
+import { EslintRule, User } from '@prisma/client'
+
+interface EslintRuleWithCreator
+  extends Omit<EslintRule, 'createdAt' | 'updatedAt'> {
+  updatedAt: string
+  createdAt: string
+  creator: User // 修改 creator 的类型
+}
 
 export async function getServerSideProps({
   locale,
@@ -8,26 +16,14 @@ export async function getServerSideProps({
   locale: string
   params: any
 }) {
-  const detail = await getRule({
+  const detail = (await getRule({
     where: {
       id
     },
     include: {
       creator: true
     }
-  })
-
-  // @ts-ignore
-  if (detail?.creator) {
-    // @ts-ignore
-    detail.creator?.createdAt &&
-      // @ts-ignore
-      (detail.creator.createdAt = detail.creator.createdAt.toISOString())
-    // @ts-ignore
-    detail.creator?.updatedAt &&
-      // @ts-ignore
-      (detail.creator.updatedAt = detail.creator.updatedAt.toISOString())
-  }
+  })) as EslintRuleWithCreator
 
   if (!detail) {
     return {
@@ -35,10 +31,19 @@ export async function getServerSideProps({
     }
   }
 
+  const serializedDetail = {
+    ...detail,
+    creator: {
+      ...detail.creator,
+      createdAt: detail.creator.createdAt.toISOString(),
+      updatedAt: detail.creator.updatedAt.toISOString()
+    }
+  }
+
   return {
     props: {
       id,
-      detail,
+      detail: serializedDetail,
       messages: {
         ...(await import(`../../messages/${locale}.json`))
       }
