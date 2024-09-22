@@ -17,6 +17,13 @@ export async function getServerSideProps({
     }
   })
 
+  if (detail?.creator) {
+    detail.creator?.createdAt &&
+      (detail.creator.createdAt = detail.creator.createdAt.toISOString())
+    detail.creator?.updatedAt &&
+      (detail.creator.updatedAt = detail.creator.updatedAt.toISOString())
+  }
+
   if (!detail) {
     return {
       notFound: true
